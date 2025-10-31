@@ -358,13 +358,13 @@ class DeckWidget(GlassWidget):
         Set up the user interface for the deck, including controls, waveform, spectrogram, EQ, and loop controls.
         """
         layout = QVBoxLayout(self)
-        layout.setSpacing(1)  # EXTREME minimal: reduced from 2 to 1
+        layout.setSpacing(0)  # ABSOLUTE ZERO spacing
         layout.setContentsMargins(1, 1, 1, 1)  # EXTREME minimal margins
         
         self.track_label = QLabel("No track loaded")
         self.track_label.setObjectName("displayLabel")
-        self.track_label.setWordWrap(True)
-        self.track_label.setMaximumHeight(20)  # Microscopic: reduced from 25
+        self.track_label.setWordWrap(False)  # No wrap for extreme compact
+        self.track_label.setMaximumHeight(16)  # EXTREME: 20 → 16
         self.track_label.setStyleSheet("font-size: 9px; padding: 1px;")  # Tiny font
         
         self.waveform = WaveformDisplay()
@@ -379,11 +379,11 @@ class DeckWidget(GlassWidget):
         viz_container = QWidget()
         viz_layout = QVBoxLayout(viz_container)
         viz_layout.setContentsMargins(0, 0, 0, 0)  # No margins
-        viz_layout.setSpacing(1)  # Ultra minimal spacing
+        viz_layout.setSpacing(0)  # Zero spacing
         
-        # Set maximum heights - MICROSCOPIC to fit without scrolling
-        self.waveform.setMaximumHeight(60)  # Microscopic waveform (was 80)
-        self.spectrogram.setMaximumHeight(50)  # Microscopic spectrogram (was 60)
+        # Set maximum heights - EXTREME COMPACT for absolute no scrolling
+        self.waveform.setMaximumHeight(45)  # EXTREME: 60 → 45
+        self.spectrogram.setMaximumHeight(35)  # EXTREME: 50 → 35
         
         viz_layout.addWidget(self.waveform)
         viz_layout.addWidget(self.spectrogram)
@@ -391,7 +391,8 @@ class DeckWidget(GlassWidget):
         controls_panel = QWidget()
         controls_panel.setObjectName("glassPanel")
         controls_layout = QHBoxLayout(controls_panel)
-        controls_layout.setSpacing(10)
+        controls_layout.setSpacing(4)  # EXTREME: 10 → 4
+        controls_layout.setContentsMargins(2, 2, 2, 2)  # Minimal margins
         
         self.play_btn = QPushButton("Play")
         self.play_btn.clicked.connect(self.toggle_playback)
@@ -401,7 +402,7 @@ class DeckWidget(GlassWidget):
         self.volume_slider.setMinimum(0)
         self.volume_slider.setMaximum(100)
         self.volume_slider.setValue(100)
-        self.volume_slider.setMaximumHeight(35)  # Microscopic: reduced from 40
+        self.volume_slider.setMaximumHeight(30)  # EXTREME: 35 → 30
         self.volume_slider.setProperty("class", "volumeSliderNormal")
         self.volume_slider.valueChanged.connect(self.handle_volume_change)
         
@@ -409,18 +410,18 @@ class DeckWidget(GlassWidget):
         tempo_slider_panel = QWidget()
         tempo_slider_layout = QVBoxLayout(tempo_slider_panel)
         tempo_slider_layout.setContentsMargins(0, 0, 0, 0)
-        tempo_slider_layout.setSpacing(2)
+        tempo_slider_layout.setSpacing(0)
         
         tempo_slider_label = QLabel("TEMPO")
         tempo_slider_label.setProperty("class", "neonText")
         tempo_slider_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        tempo_slider_label.setStyleSheet("font-size: 10px; font-weight: bold;")
+        tempo_slider_label.setStyleSheet("font-size: 8px; font-weight: bold;")
         
         self.tempo_slider = QSlider(Qt.Orientation.Vertical)
         self.tempo_slider.setMinimum(-16)  # -16% (like vinyl pitch control)
         self.tempo_slider.setMaximum(16)   # +16%
         self.tempo_slider.setValue(0)      # Center = original BPM
-        self.tempo_slider.setMaximumHeight(35)  # Microscopic: reduced from 40
+        self.tempo_slider.setMaximumHeight(30)  # EXTREME: 35 → 30
         self.tempo_slider.setTickPosition(QSlider.TickPosition.TicksBothSides)
         self.tempo_slider.setTickInterval(4)
         self.tempo_slider.setProperty("class", "tempoSlider")
@@ -429,7 +430,7 @@ class DeckWidget(GlassWidget):
         self.tempo_percent_label = QLabel("0%")
         self.tempo_percent_label.setProperty("class", "neonText")
         self.tempo_percent_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.tempo_percent_label.setStyleSheet("font-size: 9px;")
+        self.tempo_percent_label.setStyleSheet("font-size: 7px;")
         
         tempo_slider_layout.addWidget(tempo_slider_label)
         tempo_slider_layout.addWidget(self.tempo_slider)
@@ -532,38 +533,42 @@ class DeckWidget(GlassWidget):
         eq_panel = QWidget()
         eq_panel.setObjectName("glassPanel")
         eq_layout = QHBoxLayout(eq_panel)
-        eq_layout.setSpacing(10)
+        eq_layout.setSpacing(4)  # EXTREME: 10 → 4
+        eq_layout.setContentsMargins(2, 2, 2, 2)
         
         eq_label = QLabel("EQ:")
         eq_label.setProperty("class", "neonText")
         eq_layout.addWidget(eq_label)
         
         bass_layout = QVBoxLayout()
+        bass_layout.setSpacing(0)
         self.bass_knob = QDial()
         self.bass_knob.setMinimum(0); self.bass_knob.setMaximum(200); self.bass_knob.setValue(100)
         self.bass_knob.setWrapping(False); self.bass_knob.setNotchesVisible(True)
         self.bass_knob.valueChanged.connect(self._on_eq_changed)
-        self.bass_knob.setFixedSize(30, 30)  # Microscopic: reduced from 35
+        self.bass_knob.setFixedSize(25, 25)  # EXTREME: 30 → 25
         bass_label = QLabel("Bass"); bass_label.setAlignment(Qt.AlignmentFlag.AlignCenter); bass_label.setProperty("class", "neonText")
         bass_layout.addWidget(self.bass_knob, 0, Qt.AlignmentFlag.AlignCenter); bass_layout.addWidget(bass_label)
         eq_layout.addLayout(bass_layout)
         
         mid_layout = QVBoxLayout()
+        mid_layout.setSpacing(0)
         self.mid_knob = QDial()
         self.mid_knob.setMinimum(0); self.mid_knob.setMaximum(200); self.mid_knob.setValue(100)
         self.mid_knob.setWrapping(False); self.mid_knob.setNotchesVisible(True)
         self.mid_knob.valueChanged.connect(self._on_eq_changed)
-        self.mid_knob.setFixedSize(30, 30)  # Microscopic: reduced from 35
+        self.mid_knob.setFixedSize(25, 25)  # EXTREME: 30 → 25
         mid_label = QLabel("Mid"); mid_label.setAlignment(Qt.AlignmentFlag.AlignCenter); mid_label.setProperty("class", "neonText")
         mid_layout.addWidget(self.mid_knob, 0, Qt.AlignmentFlag.AlignCenter); mid_layout.addWidget(mid_label)
         eq_layout.addLayout(mid_layout)
         
         treble_layout = QVBoxLayout()
+        treble_layout.setSpacing(0)
         self.treble_knob = QDial()
         self.treble_knob.setMinimum(0); self.treble_knob.setMaximum(200); self.treble_knob.setValue(100)
         self.treble_knob.setWrapping(False); self.treble_knob.setNotchesVisible(True)
         self.treble_knob.valueChanged.connect(self._on_eq_changed)
-        self.treble_knob.setFixedSize(30, 30)  # Microscopic: reduced from 35
+        self.treble_knob.setFixedSize(25, 25)  # EXTREME: 30 → 25
         treble_label = QLabel("Treble"); treble_label.setAlignment(Qt.AlignmentFlag.AlignCenter); treble_label.setProperty("class", "neonText")
         treble_layout.addWidget(self.treble_knob, 0, Qt.AlignmentFlag.AlignCenter); treble_layout.addWidget(treble_label)
         eq_layout.addLayout(treble_layout)
