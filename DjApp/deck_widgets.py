@@ -519,6 +519,16 @@ class DeckWidget(GlassWidget):
         # Add tempo layout to the main layout
         layout.addLayout(tempo_layout)
         
+        # Beat indicator LED - flashes on beats when synced
+        self.beat_indicator = QLabel("●")
+        self.beat_indicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.beat_indicator.setFixedSize(20, 20)
+        self.beat_indicator.setStyleSheet(
+            "color: #333333; font-size: 16px; font-weight: bold; "
+            "background: rgba(50, 50, 50, 0.5); border-radius: 10px;"
+        )
+        self.beat_indicator.setToolTip("Beat Indicator - Flashes on beats when synced")
+        
         self.sync_button = QPushButton("SYNC")
         self.sync_button.setProperty("class", "syncDefault")
         
@@ -680,8 +690,68 @@ class DeckWidget(GlassWidget):
         
         layout.addLayout(loop_turntable_row)  # Add the horizontal row
         
-        layout.addWidget(self.sync_button)
+        # Sync button with beat indicator
+        sync_row = QHBoxLayout()
+        sync_row.setSpacing(10)
+        sync_row.addWidget(self.beat_indicator)
+        sync_row.addWidget(self.sync_button)
+        sync_row.addStretch()
+        layout.addLayout(sync_row)
         
+    def update_beat_indicator(self):
+        """
+        Update the beat indicator LED - flashes on beats when synced or playing.
+        """
+        if not self.beat_positions or not self.is_playing:
+            # Off when not playing
+            self.beat_indicator.setStyleSheet(
+                "color: #333333; font-size: 16px; font-weight: bold; "
+                "background: rgba(50, 50, 50, 0.5); border-radius: 10px;"
+            )
+            return
+        
+        try:
+            current_pos = self.player.position()
+            closest_beat_time, _ = self.find_closest_beat(current_pos)
+            
+            if closest_beat_time is not None:
+                # Calculate distance to closest beat
+                distance_to_beat = abs(current_pos - closest_beat_time)
+                
+                # Flash if within 100ms of a beat
+                if distance_to_beat < 100:
+                    # Bright flash on beat
+                    if self.sync_button.text() == "SYNCED" or self.sync_button.text() == "MASTER":
+                        # Blue when synced
+                        self.beat_indicator.setStyleSheet(
+                            "color: #00d4ff; font-size: 16px; font-weight: bold; "
+                            "background: rgba(0, 212, 255, 0.3); border-radius: 10px; "
+                            "box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);"
+                        )
+                    else:
+                        # Green when playing normally
+                        self.beat_indicator.setStyleSheet(
+                            "color: #00ff00; font-size: 16px; font-weight: bold; "
+                            "background: rgba(0, 255, 0, 0.3); border-radius: 10px; "
+                            "box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);"
+                        )
+                else:
+                    # Dim between beats
+                    if self.sync_button.text() == "SYNCED" or self.sync_button.text() == "MASTER":
+                        # Dim blue
+                        self.beat_indicator.setStyleSheet(
+                            "color: #004466; font-size: 16px; font-weight: bold; "
+                            "background: rgba(0, 68, 102, 0.5); border-radius: 10px;"
+                        )
+                    else:
+                        # Dim gray
+                        self.beat_indicator.setStyleSheet(
+                            "color: #444444; font-size: 16px; font-weight: bold; "
+                            "background: rgba(68, 68, 68, 0.5); border-radius: 10px;"
+                        )
+        except:
+            pass  # Fail silently
+    
     def _update_bpm_display(self, bpm):
         """
         Update the BPM display and track label.
@@ -1078,6 +1148,9 @@ class DeckWidget(GlassWidget):
         self.waveform.set_position(position, duration, self.beat_positions)
         self.spectrogram.update_position(position, duration)
         
+        # Update beat indicator LED
+        self.update_beat_indicator()
+        
     def update_duration(self, duration):
         """
         Update the total duration label for the track.
@@ -1216,11 +1289,11 @@ class DeckWidget(GlassWidget):
 
     def reset_tempo(self):
         """
-        Reset the deck's tempo to the original BPM INSTANTLY and reset slider.
+        Reset the deck's tempo to the original BPM INSTANTLY, reset slider, and reset key transpose.
         """
         if self.original_bpm == 0: 
             print(f"Deck {self.deck_number}: Cannot reset tempo - Original BPM not set."); return
-        if self.current_bpm != self.original_bpm:
+        if self.current_bpm != self.original_bpm or self.key_transpose != 0:
             print(f"Deck {self.deck_number}: ⚡ INSTANT tempo reset to {self.original_bpm} BPM")
             
             # Reset tempo slider to center (0%)
@@ -1229,6 +1302,12 @@ class DeckWidget(GlassWidget):
                 self.tempo_slider.setValue(0)
                 self.tempo_percent_label.setText("0%")
                 self.tempo_slider.blockSignals(False)
+            
+            # Reset key transpose when unsyncing
+            if self.key_transpose != 0:
+                print(f"Deck {self.deck_number}: Resetting key transpose from {self.key_transpose:+d} semitones")
+                self.key_transpose = 0
+                self._update_key_display()
             
             if self.main_app and hasattr(self.main_app, 'sync_master') and self.main_app.sync_master == self.deck_number:
                  if hasattr(self.main_app, 'sync_slave_deck_tempo'):
@@ -1317,8 +1396,14 @@ class DeckWidget(GlassWidget):
         
         self.key_display_label.setText(display_text)
         
-        # Color code confidence
-        if self.key_confidence > 0.7:
+        # Color code based on transpose state and confidence
+        if self.key_transpose != 0:
+            # Key is transposed/synced - use cyan/blue to indicate sync
+            self.key_display_label.setStyleSheet(
+                "color: #00d4ff; font-weight: bold; "
+                "text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);"
+            )
+        elif self.key_confidence > 0.7:
             self.key_display_label.setStyleSheet("color: #00ff00;")  # Green for high confidence
         elif self.key_confidence > 0.5:
             self.key_display_label.setStyleSheet("color: #ffff00;")  # Yellow for medium confidence
@@ -1345,11 +1430,22 @@ class DeckWidget(GlassWidget):
             # Apply instantly via QMediaPlayer
             self.player.setPlaybackRate(playback_rate)
             
-            # Update UI
+            # Update UI - BPM display and tempo slider
             self.current_bpm = new_bpm
             self.tempo_text.setText(str(new_bpm))
             
-            print(f"Deck {self.deck_number}: ⚡ INSTANT tempo set to {new_bpm} BPM (rate: {playback_rate:.2f}x)")
+            # Update tempo slider to reflect the new BPM
+            tempo_change_percent = ((new_bpm - self.original_bpm) / self.original_bpm) * 100
+            # Block signals to prevent triggering tempo_changed while updating
+            self.tempo_slider.blockSignals(True)
+            self.tempo_slider.setValue(int(tempo_change_percent))
+            self.tempo_slider.blockSignals(False)
+            
+            # Update the tempo percentage label
+            if hasattr(self, 'tempo_percent_label'):
+                self.tempo_percent_label.setText(f"{tempo_change_percent:+.1f}%")
+            
+            print(f"Deck {self.deck_number}: ⚡ INSTANT tempo set to {new_bpm} BPM (rate: {playback_rate:.2f}x, slider: {tempo_change_percent:+.1f}%)")
             
         except Exception as e:
             print(f"Deck {self.deck_number}: Error setting instant tempo: {e}")

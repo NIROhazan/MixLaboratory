@@ -2,7 +2,7 @@ import os
 # PyQt6 Imports
 from PyQt6.QtWidgets import (QDialog, QListWidget, QListWidgetItem, QLabel, 
                            QVBoxLayout, QHBoxLayout, QPushButton, QWidget, 
-                           QSizePolicy, QMessageBox)
+                           QSizePolicy, QMessageBox, QComboBox, QLineEdit)
 from PyQt6.QtCore import QSize, pyqtSignal, QThread, Qt
 
 
@@ -169,11 +169,56 @@ class FileBrowserDialog(QDialog):
         self.status_label.setStyle(self.status_label.style())  # Force style update
         layout.addWidget(self.status_label)
 
+        # Add search and sorting controls
+        controls_layout = QHBoxLayout()
+        
+        # Search box
+        search_label = QLabel("🔍 Search:")
+        search_label.setProperty("class", "neonText")
+        search_label.setStyleSheet("font-size: 11px; font-weight: bold;")
+        
+        self.search_box = QLineEdit()
+        self.search_box.setPlaceholderText("Type to filter tracks...")
+        self.search_box.setProperty("class", "neonBorder")
+        self.search_box.textChanged.connect(self.filter_tracks)
+        self.search_box.setMinimumWidth(200)
+        self.search_box.setClearButtonEnabled(True)  # Add clear button
+        
+        controls_layout.addWidget(search_label)
+        controls_layout.addWidget(self.search_box)
+        controls_layout.addSpacing(20)
+        
+        # Sort dropdown
+        sort_label = QLabel("Sort by:")
+        sort_label.setProperty("class", "neonText")
+        sort_label.setStyleSheet("font-size: 11px; font-weight: bold;")
+        
+        self.sort_combo = QComboBox()
+        self.sort_combo.addItem("Name (A-Z)", "name_asc")
+        self.sort_combo.addItem("Name (Z-A)", "name_desc")
+        self.sort_combo.addItem("BPM (Low-High)", "bpm_asc")
+        self.sort_combo.addItem("BPM (High-Low)", "bpm_desc")
+        self.sort_combo.addItem("Key (A-Z)", "key_asc")
+        self.sort_combo.addItem("Key (Z-A)", "key_desc")
+        self.sort_combo.addItem("Duration (Short-Long)", "duration_asc")
+        self.sort_combo.addItem("Duration (Long-Short)", "duration_desc")
+        self.sort_combo.currentIndexChanged.connect(self.sort_tracks)
+        self.sort_combo.setProperty("class", "neonBorder")
+        
+        controls_layout.addWidget(sort_label)
+        controls_layout.addWidget(self.sort_combo)
+        controls_layout.addStretch()
+        layout.addLayout(controls_layout)
+
         self.list_widget = QListWidget()
         self.list_widget.setProperty("class", "fileBrowserList")
         self.list_widget.setStyle(self.list_widget.style())  # Force style update
         layout.addWidget(self.list_widget)
         # self.setLayout(layout) # Set layout automatically via self
+        
+        # Store current sorting preference
+        self.current_sort = "name_asc"
+        self.track_metadata = []  # Store track metadata for sorting
 
     def set_directory(self, directory):
         """
@@ -204,12 +249,102 @@ class FileBrowserDialog(QDialog):
             self.analyzer_thread.wait()
         super().closeEvent(event) # Call base class method
 
+    def filter_tracks(self):
+        """
+        Filter tracks based on search box text.
+        """
+        search_text = self.search_box.text().lower().strip()
+        
+        if not search_text:
+            # Show all tracks if search is empty
+            self.rebuild_track_list()
+            return
+        
+        # Filter tracks by filename
+        filtered_tracks = [
+            track for track in self.track_metadata
+            if search_text in track['filename'].lower()
+        ]
+        
+        # Rebuild list with filtered tracks
+        self.list_widget.clear()
+        for track in filtered_tracks:
+            self._add_track_widget_only(
+                track['filename'], 
+                track['bpm'], 
+                track['key'], 
+                track['key_confidence'],
+                track['duration']
+            )
+        
+        # Update status label
+        if filtered_tracks:
+            self.status_label.setText(f"Found {len(filtered_tracks)} track(s) matching '{search_text}'")
+        else:
+            self.status_label.setText(f"No tracks found matching '{search_text}'")
+    
+    def rebuild_track_list(self):
+        """
+        Rebuild the track list with all tracks (used after clearing search).
+        """
+        self.list_widget.clear()
+        for track in self.track_metadata:
+            self._add_track_widget_only(
+                track['filename'], 
+                track['bpm'], 
+                track['key'], 
+                track['key_confidence'],
+                track['duration']
+            )
+        
+        # Update status
+        if self.track_metadata:
+            self.status_label.setText(f"Showing all {len(self.track_metadata)} tracks")
+
+    def sort_tracks(self):
+        """
+        Sort the track list based on the selected criterion.
+        """
+        sort_type = self.sort_combo.currentData()
+        if not sort_type or not self.track_metadata:
+            return
+        
+        self.current_sort = sort_type
+        
+        # Sort track metadata
+        if sort_type == "name_asc":
+            self.track_metadata.sort(key=lambda x: x['filename'].lower())
+        elif sort_type == "name_desc":
+            self.track_metadata.sort(key=lambda x: x['filename'].lower(), reverse=True)
+        elif sort_type == "bpm_asc":
+            self.track_metadata.sort(key=lambda x: (x['bpm'] if x['bpm'] > 0 else 999999, x['filename'].lower()))
+        elif sort_type == "bpm_desc":
+            self.track_metadata.sort(key=lambda x: (x['bpm'] if x['bpm'] > 0 else 0), reverse=True)
+        elif sort_type == "key_asc":
+            self.track_metadata.sort(key=lambda x: (x['key'] if x['key'] else 'ZZZ', x['filename'].lower()))
+        elif sort_type == "key_desc":
+            self.track_metadata.sort(key=lambda x: (x['key'] if x['key'] else '', x['filename'].lower()), reverse=True)
+        elif sort_type == "duration_asc":
+            self.track_metadata.sort(key=lambda x: (x['duration'] if x['duration'] > 0 else 999999, x['filename'].lower()))
+        elif sort_type == "duration_desc":
+            self.track_metadata.sort(key=lambda x: (x['duration'] if x['duration'] > 0 else 0), reverse=True)
+        
+        # After sorting, apply current search filter if any
+        search_text = self.search_box.text().lower().strip()
+        if search_text:
+            # Re-apply the filter with sorted data
+            self.filter_tracks()
+        else:
+            # Rebuild UI list in sorted order
+            self.rebuild_track_list()
+
     def populate_file_list(self):
         """
         Populates the list with audio files in the selected folder.
         """
         self.list_widget.clear()
         self.track_items = {}
+        self.track_metadata = []  # Reset metadata for new directory
 
         if not self.directory or not os.path.isdir(self.directory):
             self.status_label.setText("No valid directory selected.")
@@ -329,15 +464,45 @@ class FileBrowserDialog(QDialog):
             # If all files were cached, mark as complete
             self.analysis_completed()              
 
-    def add_track_to_list(self, file, bpm=0, key="", key_confidence=0.0):
+    def add_track_to_list(self, file, bpm=0, key="", key_confidence=0.0, duration=0):
         """
-        Add a track to the list widget with BPM and Key information.
+        Add a track to the list widget with BPM, Key, and Duration information.
 
         Args:
             file (str): File name of the audio track.
             bpm (float, optional): BPM value if already known.
             key (str, optional): Musical key if already known.
             key_confidence (float, optional): Key detection confidence (0-1).
+            duration (float, optional): Track duration in seconds.
+        """
+        # Store track metadata for sorting
+        full_path = os.path.join(self.directory, file)
+        
+        # Get duration if not provided
+        if duration == 0:
+            try:
+                import soundfile as sf
+                with sf.SoundFile(full_path) as f:
+                    duration = len(f) / f.samplerate
+            except:
+                duration = 0
+        
+        self.track_metadata.append({
+            'filename': file,
+            'bpm': bpm,
+            'key': key,
+            'key_confidence': key_confidence,
+            'duration': duration,
+            'full_path': full_path
+        })
+        
+        # Add the visual widget
+        self._add_track_widget_only(file, bpm, key, key_confidence, duration)
+    
+    def _add_track_widget_only(self, file, bpm=0, key="", key_confidence=0.0, duration=0):
+        """
+        Internal method: Add only the visual widget for a track without storing metadata.
+        Used when rebuilding the list after sorting.
         """
         item = QListWidgetItem(self.list_widget)
         # Increase height to accommodate buttons with spacing
@@ -395,6 +560,12 @@ class FileBrowserDialog(QDialog):
             metadata_parts.append(f'🎹 <span style="color: {key_color};">{key_display} {confidence_icon}</span>')
         else:
             metadata_parts.append(f'🎹 <span style="color: #888;">---</span>')  # Show placeholder if no key
+        
+        # Add duration if available
+        if duration > 0:
+            minutes = int(duration // 60)
+            seconds = int(duration % 60)
+            metadata_parts.append(f"⏱️ {minutes}:{seconds:02d}")
         
         final_text = " | ".join(metadata_parts)
         metadata_label.setText(final_text)

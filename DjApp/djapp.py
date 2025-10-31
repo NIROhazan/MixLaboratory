@@ -119,8 +119,20 @@ class DJApp(QMainWindow):
         self.recording_file_path = None
         self.recordings_list = []  # Keep track of all recordings in this session
         
-        # Sync state
+        # Sync state - Professional DJ sync system
         self.sync_master = None # None, 1, or 2
+        self.sync_lock_enabled = True  # Maintains beat phase lock continuously
+        self.quantize_enabled = True  # Snap actions to nearest beat
+        self.keylock_enabled = True  # Maintain pitch when changing tempo
+        
+        # Beat phase monitoring for continuous sync
+        self.beat_phase_monitor = QTimer(self)
+        self.beat_phase_monitor.timeout.connect(self._monitor_beat_phase)
+        self.beat_phase_monitor.setInterval(500)  # Check every 500ms (less aggressive)
+        self.beat_phase_tolerance_ms = 150  # ±150ms tolerance before auto-correction
+        self.last_phase_correction_time = 0  # Track last correction to prevent loops
+        self.phase_correction_cooldown_ms = 3000  # 3 seconds cooldown between corrections
+        self.last_phase_drift = 0  # Track previous drift to detect increasing drift
         
         # Auto-mix playlist queue
         self.automix_playlist = []
@@ -940,9 +952,63 @@ class DJApp(QMainWindow):
             event.accept()  # Still accept the close event even if cleanup fails
 
     # --- Sync Logic --- 
+    def calculate_key_semitone_difference(self, key1, key2):
+        """
+        Calculate the semitone difference between two musical keys.
+        
+        Args:
+            key1 (str): First key (e.g., "C", "Am", "F#")
+            key2 (str): Second key (e.g., "G", "Em", "Bb")
+            
+        Returns:
+            int: Semitone difference (0-11), or None if keys are invalid
+        """
+        # Camelot wheel for harmonic mixing
+        camelot_wheel = {
+            # Major keys
+            'C': 0, 'G': 7, 'D': 2, 'A': 9, 'E': 4, 'B': 11, 'F#': 6, 'Gb': 6, 'Db': 1, 'C#': 1, 'Ab': 8, 'G#': 8, 'Eb': 3, 'D#': 3, 'Bb': 10, 'A#': 10, 'F': 5,
+            # Minor keys (adding 'm' suffix)
+            'Cm': 0, 'Gm': 7, 'Dm': 2, 'Am': 9, 'Em': 4, 'Bm': 11, 'F#m': 6, 'Gbm': 6, 'Dbm': 1, 'C#m': 1, 'Abm': 8, 'G#m': 8, 'Ebm': 3, 'D#m': 3, 'Bbm': 10, 'A#m': 10, 'Fm': 5
+        }
+        
+        if not key1 or not key2 or key1 not in camelot_wheel or key2 not in camelot_wheel:
+            return None
+        
+        diff = (camelot_wheel[key2] - camelot_wheel[key1]) % 12
+        # Return the shortest path (either up or down the chromatic scale)
+        return diff if diff <= 6 else diff - 12
+    
+    def are_keys_compatible(self, key1, key2):
+        """
+        Check if two keys are harmonically compatible for mixing.
+        
+        Args:
+            key1 (str): First key
+            key2 (str): Second key
+            
+        Returns:
+            bool: True if keys are compatible, False otherwise
+        """
+        if not key1 or not key2:
+            return False
+        
+        # Same key is always compatible
+        if key1 == key2:
+            return True
+        
+        # Compatible intervals: Perfect 5th (7 semitones), Perfect 4th (5 semitones), Minor 3rd (3 semitones)
+        # Also relative major/minor relationships
+        diff = self.calculate_key_semitone_difference(key1, key2)
+        if diff is None:
+            return False
+        
+        compatible_intervals = [0, 2, 3, 5, 7]  # Same, whole tone, minor 3rd, perfect 4th, perfect 5th
+        return abs(diff) in compatible_intervals
+
     def toggle_sync(self, deck_number):
         """
         Handles clicks on the SYNC buttons.
+        Professional DJ sync: matches BPM, beats, and key.
         
         Args:
             deck_number (int): Deck number (1 or 2).
@@ -960,6 +1026,10 @@ class DJApp(QMainWindow):
              self.sync_master = deck_number
              self.update_sync_button_style(deck_number, "master")
              self.update_sync_button_style(other_deck_number, "default") # Ensure other is default
+             # Start beat phase monitoring
+             if not self.beat_phase_monitor.isActive():
+                 self.beat_phase_monitor.start()
+                 print("🔄 Beat phase monitoring activated")
 
         # Case 2: The clicked deck is the current sync master
         elif self.sync_master == deck_number:
@@ -972,6 +1042,10 @@ class DJApp(QMainWindow):
              # Reset button styles
              self.update_sync_button_style(deck_number, "default")
              self.update_sync_button_style(other_deck_number, "default")
+             # Stop beat phase monitoring
+             if self.beat_phase_monitor.isActive():
+                 self.beat_phase_monitor.stop()
+                 print("⏸ Beat phase monitoring deactivated")
 
         # Case 3: The OTHER deck is the sync master
         else: 
@@ -986,55 +1060,193 @@ class DJApp(QMainWindow):
                   print(f"Syncing Deck {deck_number} to Master Deck {self.sync_master}.")
                   master_bpm = other_deck.current_bpm
                   if master_bpm > 0:
-                       # Check if decks have tracks loaded and analyzed (basic check)
-                       if not this_deck.current_file or not other_deck.current_file or not this_deck.beat_positions or not other_deck.beat_positions:
-                           QMessageBox.warning(self, "Sync Error", "Both decks must have tracks loaded and analyzed to sync.")
+                       # Check if tracks are loaded
+                       if not this_deck.current_file or not other_deck.current_file:
+                           QMessageBox.warning(self, "Sync Error", "Both decks must have tracks loaded to sync.")
                            return
-                           
-                       # --- Enhanced Beat Matching Logic --- 
-                       master_pos = other_deck.player.position()
-                       slave_pos = this_deck.player.position()
-
-                       master_closest_beat_time, _ = other_deck.find_closest_beat(master_pos)
-                       slave_closest_beat_time, _ = this_deck.find_closest_beat(slave_pos)
-
-                       target_slave_pos = None
-                       if master_closest_beat_time is not None and slave_closest_beat_time is not None:
-                           # Calculate the phase within the beat grid for master
-                           master_offset = master_pos - master_closest_beat_time
-                           slave_offset = slave_pos - slave_closest_beat_time
-                           
-                           # Calculate adjustment needed to align beats perfectly
-                           adjustment = master_offset - slave_offset
-                           
-                           # Calculate target position with smooth alignment
-                           duration_ms = this_deck.player.duration()
-                           calculated_target = slave_pos + adjustment
-                           
-                           if duration_ms > 0:
-                               target_slave_pos = max(0, min(int(calculated_target), duration_ms))
-                           else:
-                               target_slave_pos = max(0, int(calculated_target))
-                               
-                           print(f"🎵 Beat Sync: Master Pos={master_pos}ms, Master Beat={master_closest_beat_time}ms, Phase={master_offset}ms")
-                           print(f"🎵 Beat Sync: Slave Pos={slave_pos}ms, Slave Beat={slave_closest_beat_time}ms, Phase={slave_offset}ms")
-                           print(f"🎵 Beat Sync: Adjustment={adjustment}ms → Moving to {target_slave_pos}ms for perfect alignment")
-                           
-                           # If currently playing, apply the position immediately for instant sync
-                           if this_deck.is_playing:
-                               this_deck.player.setPosition(target_slave_pos)
-                               print(f"✓ Instant beat alignment applied to playing deck")
-                       else:
-                           print("⚠ Beat Sync: Could not find closest beats for alignment. Syncing BPM only.")
                        
-                       print(f"Applying Master BPM ({master_bpm}) to Deck {deck_number}.")
-                       # Apply tempo change with the calculated target position for perfect beat matching
-                       this_deck.set_deck_tempo(master_bpm, target_position_after_load=target_slave_pos)
-                       self.update_sync_button_style(deck_number, "synced") # Update style after attempting
+                       # === PROFESSIONAL DJ SYNC: BPM + KEY + BEATS ===
+                       
+                       # 1. Apply BPM sync INSTANTLY first (always)
+                       print(f"⚡ Applying Master BPM ({master_bpm}) to Deck {deck_number} INSTANTLY.")
+                       this_deck.set_deck_tempo_instant(master_bpm)
+                       
+                       # 2. Apply KEY SYNC for harmonic mixing (like Pioneer CDJ)
+                       master_key = other_deck.detected_key
+                       slave_key = this_deck.detected_key
+                       
+                       if master_key and slave_key:
+                           key_diff = self.calculate_key_semitone_difference(slave_key, master_key)
+                           if key_diff is not None and key_diff != 0:
+                               # Check if keys are compatible
+                               compatible = self.are_keys_compatible(master_key, slave_key)
+                               
+                               if compatible:
+                                   print(f"🎹 Keys are compatible: {slave_key} → {master_key} ({key_diff:+d} semitones)")
+                                   # Show brief notification for compatible keys
+                                   self.statusBar().showMessage(f"✓ Keys are compatible: {slave_key} ↔ {master_key}", 3000)
+                               else:
+                                   print(f"🎹 KEY SYNC: Adjusting {slave_key} → {master_key} ({key_diff:+d} semitones)")
+                                   # Store the key transpose for display
+                                   this_deck.key_transpose = key_diff
+                                   this_deck._update_key_display()
+                                   
+                                   # In professional apps, key sync uses pitch shift or playback rate adjustment
+                                   # We'll use a subtle playback rate adjustment for key matching
+                                   # Note: 1 semitone ≈ 5.95% change in frequency
+                                   pitch_adjust = 2 ** (key_diff / 12.0)  # Musical semitone formula
+                                   current_rate = this_deck.player.playbackRate()
+                                   new_rate = current_rate * pitch_adjust
+                                   new_rate = max(0.5, min(new_rate, 2.0))  # Safety limits
+                                   
+                                   this_deck.player.setPlaybackRate(new_rate)
+                                   print(f"✓ Playback rate adjusted: {current_rate:.3f}x → {new_rate:.3f}x for key match")
+                                   # Show notification for key adjustment
+                                   self.statusBar().showMessage(f"🎹 Key Synced: {slave_key} → {master_key} ({key_diff:+d} semitones)", 5000)
+                           else:
+                               print(f"✓ Keys already match: {master_key}")
+                       else:
+                           print(f"⚠ Key sync unavailable (Master: {master_key or 'unknown'}, Slave: {slave_key or 'unknown'})")
+                       
+                       self.update_sync_button_style(deck_number, "synced")
+                       
+                       # 3. Then try beat alignment if beat positions are available
+                       if this_deck.beat_positions and other_deck.beat_positions:
+                           print(f"🎵 Beat positions available - applying beat alignment...")
+                           master_pos = other_deck.player.position()
+                           slave_pos = this_deck.player.position()
+
+                           master_closest_beat_time, master_beat_index = other_deck.find_closest_beat(master_pos)
+                           slave_closest_beat_time, slave_beat_index = this_deck.find_closest_beat(slave_pos)
+
+                           if master_closest_beat_time is not None and slave_closest_beat_time is not None:
+                               # Calculate the phase within the beat grid for master
+                               master_offset = master_pos - master_closest_beat_time
+                               slave_offset = slave_pos - slave_closest_beat_time
+                               
+                               # Professional Quantization: If quantize is enabled, snap to nearest beat
+                               if self.quantize_enabled:
+                                   # Snap to the nearest beat/bar (4 beats)
+                                   # Find the next bar boundary for smooth mixing
+                                   if master_beat_index is not None and len(other_deck.beat_positions) > master_beat_index + 1:
+                                       # Calculate next bar (every 4 beats)
+                                       beats_to_next_bar = 4 - (master_beat_index % 4)
+                                       if beats_to_next_bar > 0 and master_beat_index + beats_to_next_bar < len(other_deck.beat_positions):
+                                           next_bar_time = other_deck.beat_positions[master_beat_index + beats_to_next_bar]
+                                           master_offset = next_bar_time - master_pos
+                                           print(f"📍 Quantize: Snapping to next bar in {beats_to_next_bar} beats ({master_offset:.0f}ms)")
+                               
+                               # Calculate adjustment needed to align beats perfectly
+                               adjustment = master_offset - slave_offset
+                               
+                               # Calculate target position with smooth alignment
+                               duration_ms = this_deck.player.duration()
+                               calculated_target = slave_pos + adjustment
+                               
+                               if duration_ms > 0:
+                                   target_slave_pos = max(0, min(int(calculated_target), duration_ms))
+                               else:
+                                   target_slave_pos = max(0, int(calculated_target))
+                                   
+                               print(f"🎵 Beat Sync: Master Pos={master_pos}ms, Master Beat={master_closest_beat_time}ms, Phase={master_offset}ms")
+                               print(f"🎵 Beat Sync: Slave Pos={slave_pos}ms, Slave Beat={slave_closest_beat_time}ms, Phase={slave_offset}ms")
+                               print(f"🎵 Beat Sync: Adjustment={adjustment}ms → Moving to {target_slave_pos}ms for perfect alignment")
+                               
+                               # If currently playing, apply the position immediately for instant sync
+                               if this_deck.is_playing:
+                                   this_deck.player.setPosition(target_slave_pos)
+                                   print(f"✓ Instant beat alignment applied to playing deck")
+                           else:
+                               print("⚠ Beat Sync: Could not find closest beats for alignment. BPM only.")
+                       else:
+                           print("⚠ Beat positions not available. BPM sync only (instant).")
                   else:
                        print(f"Cannot sync Deck {deck_number}: Master Deck {self.sync_master} has invalid BPM ({master_bpm})")
                        QMessageBox.warning(self, "Sync Error", f"Master deck (Deck {self.sync_master}) has no valid BPM detected.")
 
+    def _monitor_beat_phase(self):
+        """
+        Professional beat phase monitoring - continuously checks and corrects beat alignment.
+        Runs every 500ms when sync is active to maintain perfect beat lock with intelligent dampening.
+        """
+        if self.sync_master is None or not self.sync_lock_enabled:
+            return
+        
+        master_deck = self.deck1 if self.sync_master == 1 else self.deck2
+        slave_deck_number = 2 if self.sync_master == 1 else 1
+        slave_deck = self.deck2 if self.sync_master == 1 else self.deck1
+        
+        # Only monitor if slave is synced and both decks are playing
+        if slave_deck.sync_button.text() != "SYNCED":
+            self.last_phase_drift = 0  # Reset drift tracking
+            return
+        
+        if not master_deck.is_playing or not slave_deck.is_playing:
+            self.last_phase_drift = 0  # Reset drift tracking
+            return
+        
+        # Check if both decks have beat positions
+        if not master_deck.beat_positions or not slave_deck.beat_positions:
+            return
+        
+        try:
+            # Check cooldown - prevent corrections too frequently
+            import time
+            current_time = time.time() * 1000  # Convert to milliseconds
+            time_since_last_correction = current_time - self.last_phase_correction_time
+            
+            if time_since_last_correction < self.phase_correction_cooldown_ms:
+                # Still in cooldown period
+                return
+            
+            master_pos = master_deck.player.position()
+            slave_pos = slave_deck.player.position()
+            
+            master_closest_beat_time, _ = master_deck.find_closest_beat(master_pos)
+            slave_closest_beat_time, _ = slave_deck.find_closest_beat(slave_pos)
+            
+            if master_closest_beat_time is not None and slave_closest_beat_time is not None:
+                # Calculate phase difference
+                master_offset = master_pos - master_closest_beat_time
+                slave_offset = slave_pos - slave_closest_beat_time
+                phase_diff = abs(master_offset - slave_offset)
+                
+                # Only correct if:
+                # 1. Drift exceeds tolerance
+                # 2. Drift is increasing (not a temporary fluctuation)
+                # 3. Cooldown period has passed
+                if phase_diff > self.beat_phase_tolerance_ms:
+                    # Check if drift is actually increasing (not just fluctuating)
+                    if self.last_phase_drift > 0 and phase_diff < self.last_phase_drift * 1.5:
+                        # Drift is stable or decreasing, don't correct
+                        self.last_phase_drift = phase_diff
+                        return
+                    
+                    # Drift is significant and increasing - apply correction
+                    adjustment = master_offset - slave_offset
+                    new_slave_pos = slave_pos + adjustment
+                    duration_ms = slave_deck.player.duration()
+                    
+                    if duration_ms > 0:
+                        new_slave_pos = max(0, min(int(new_slave_pos), duration_ms))
+                    else:
+                        new_slave_pos = max(0, int(new_slave_pos))
+                    
+                    # Apply smooth micro-correction
+                    slave_deck.player.setPosition(new_slave_pos)
+                    
+                    # Update tracking variables
+                    self.last_phase_correction_time = current_time
+                    self.last_phase_drift = phase_diff
+                    
+                    print(f"🔄 Beat phase correction: {phase_diff:.0f}ms drift → corrected (cooldown: {self.phase_correction_cooldown_ms/1000}s)")
+                else:
+                    # Within tolerance - update drift tracking
+                    self.last_phase_drift = phase_diff
+        except Exception as e:
+            # Fail silently to not interrupt playback
+            pass
+    
     def sync_slave_deck_tempo(self, master_new_bpm):
          """
          Called when the master deck's tempo changes, updates the slave if synced.
@@ -1088,7 +1300,16 @@ class DJApp(QMainWindow):
                          stop:0 rgba(0, 170, 255, 1.0),
                          stop:1 rgba(0, 140, 255, 0.95)
                      );
-                     border: 4px solid #00b4ff;
+                     border: 3px solid #00d4ff;
+                 }
+                 QPushButton:pressed {
+                     background: qlineargradient(
+                         spread:pad, x1:0, y1:0, x2:0, y2:1,
+                         stop:0 rgba(0, 130, 235, 0.95),
+                         stop:1 rgba(0, 100, 215, 0.85)
+                     );
+                     border: 3px solid #0096ff;
+                     padding: 10px 20px;
                  }
              """)
         elif state == "synced":
@@ -1117,7 +1338,16 @@ class DJApp(QMainWindow):
                          stop:0 rgba(0, 170, 255, 1.0),
                          stop:1 rgba(0, 140, 255, 0.95)
                      );
-                     border: 4px solid #00b4ff;
+                     border: 3px solid #00d4ff;
+                 }
+                 QPushButton:pressed {
+                     background: qlineargradient(
+                         spread:pad, x1:0, y1:0, x2:0, y2:1,
+                         stop:0 rgba(0, 130, 235, 0.95),
+                         stop:1 rgba(0, 100, 215, 0.85)
+                     );
+                     border: 3px solid #0096ff;
+                     padding: 10px 20px;
                  }
              """)
         else: # Default state

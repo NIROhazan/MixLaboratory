@@ -20,11 +20,11 @@
     },
     "bpm_cached": true,
     "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\94df83c795a3b8ebc1e6ea9126876d14.json",
-    "last_updated": 1761926755.4503605,
+    "last_updated": 1761929410.521472,
     "waveform_cached": true,
     "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\94df83c795a3b8ebc1e6ea9126876d14.npz",
     "fft_cached": true,
-    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\94df83c795a3b8ebc1e6ea9126876d14.pkl",
+    "fft_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\fft\\94df83c795a3b8ebc1e6ea9126876d14.pkl",
     "key_cached": true,
     "key": "A# Minor (3A)",
     "key_confidence": 0.6140322147695336
@@ -554,5 +554,20 @@
     "waveform_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\waveforms\\bf9fae5773df84b29ad1b27724619c3f.npz",
     "fft_cached": true,
     "fft_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\fft\\bf9fae5773df84b29ad1b27724619c3f.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Astrix & Tristan - Awake the snake.mp3": {
+    "file_info": {
+      "size": 12494574,
+      "mtime": 1730199417.4299862,
+      "hash": "4ff6857f2684f37e8a6bfe1aa7fef5af"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\bpm\\fafba1bfb22404f77b6cd7b5ef9cd072.json",
+    "last_updated": 1761929399.4958553,
+    "key_cached": true,
+    "key": "F# Minor (11A)",
+    "key_confidence": 0.8967794409374099,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\waveforms\\fafba1bfb22404f77b6cd7b5ef9cd072.npz"
   }
 }
