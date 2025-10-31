@@ -1,2 +1,5 @@
-# MixLaboratory
-My upgrades to the Dj application from my B.Sc in computer science 
+# MixLab
+
+Owr Final Project in Computer Science
+
+Crossplatform for Windows / Linux / macOS

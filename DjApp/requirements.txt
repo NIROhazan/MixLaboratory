@@ -1,0 +1,74 @@
+# MixLab DJ - Python Dependencies
+# Requires Python 3.11+ (recommended: Python 3.12 for best stability)
+# Python 3.11+ provides significant speed improvements (10-60% faster)
+#
+# VERSION COMPATIBILITY:
+# ✅ Python 3.11 - Stable, well-tested, fast
+# ✅ Python 3.12 - RECOMMENDED - Most stable, best package support
+# ⚠️ Python 3.13 - Experimental JIT, may have limited package support
+# 🔬 Python 3.14 - Cutting-edge, use for testing only (October 2025 release)
+#
+# For production use: Python 3.12 is recommended
+# For experimentation: Python 3.13 or 3.14 (ensure all packages have wheels)
+
+# ============================================================================
+# CORE DEPENDENCIES
+# ============================================================================
+
+# Core numerical computing (with SIMD optimizations in latest versions)
+numpy>=1.26.0,<2.0.0  # 1.26+ required for Python 3.12 compatibility
+
+# GUI Framework (latest stable)
+PyQt6>=6.6.0  # 6.6+ includes bug fixes and Qt 6.6 features
+
+# Audio file I/O (latest with bug fixes)
+soundfile>=0.12.1  # Latest stable with security patches
+
+# Real-time audio processing and device access
+sounddevice>=0.4.6  # 0.4.6+ includes portaudio improvements
+
+# Signal processing for equalizer and audio effects
+scipy>=1.11.0  # 1.11+ optimized for Python 3.11+
+
+# ============================================================================
+# MUSIC ANALYSIS & AI FEATURES
+# ============================================================================
+
+# Music information retrieval for key detection and harmonic analysis
+librosa>=0.10.1  # 0.10.1+ includes performance improvements and bug fixes
+
+# Audio resampling backend for librosa (faster than default)
+soxr>=0.3.7  # High-quality, fast resampling (recommended for librosa)
+
+# Numba for JIT compilation (speeds up librosa significantly)
+numba>=0.58.0  # 0.58+ optimized for Python 3.11-3.12
+
+# LLVM lite for numba (required dependency)
+llvmlite>=0.41.0  # Compatible with numba 0.58+
+
+# ============================================================================
+# PROFESSIONAL AUDIO PROCESSING (OPTIONAL BUT RECOMMENDED)
+# ============================================================================
+
+# Professional audio time-stretching and pitch-shifting
+# Note: Requires rubberband library installed on system
+# Windows: Download from https://breakfastquay.com/rubberband/
+# Linux: sudo apt-get install rubberband-cli librubberband-dev
+# macOS: brew install rubberband
+pyrubberband>=0.3.0  # Industry-standard time-stretching
+
+# ============================================================================
+# AUDIO CODECS & FORMATS (RECOMMENDED)
+# ============================================================================
+
+# Additional audio format support
+# Uncomment if you need MP3 support beyond what soundfile provides:
+# audioread>=3.0.0  # MP3, M4A, and other formats via ffmpeg/GStreamer
+
+# ============================================================================
+# PERFORMANCE MONITORING (DEVELOPMENT/OPTIONAL)
+# ============================================================================
+
+# Uncomment for performance profiling during development:
+# psutil>=5.9.0  # CPU and memory monitoring
+# memory_profiler>=0.61.0  # Memory profiling 

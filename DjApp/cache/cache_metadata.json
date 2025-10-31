@@ -1,0 +1,529 @@
+{
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\2024-10-29_12h49m07.wav": {
+    "file_info": {
+      "size": 78632026,
+      "mtime": 1730199607.2763164,
+      "hash": "c365307b232a0515ebac6ffd19d69b15"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\600ea55e059c6a62f7ad38aa202da39d.json",
+    "last_updated": 1761919817.147794,
+    "key_cached": true,
+    "key": "D# Minor (2A)",
+    "key_confidence": 0.620054027443901
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Camelphat & Elderbrook \u2018Cola\u2019 [ ezmp3.cc ].mp3": {
+    "file_info": {
+      "size": 6691212,
+      "mtime": 1729942142.4881885,
+      "hash": "506cd274831931a1e80a4e58d93b68d6"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\94df83c795a3b8ebc1e6ea9126876d14.json",
+    "last_updated": 1754840586.9874165,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\94df83c795a3b8ebc1e6ea9126876d14.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\94df83c795a3b8ebc1e6ea9126876d14.pkl"
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\2025-06-07_18h38m20.wav": {
+    "file_info": {
+      "size": 37470252,
+      "mtime": 1749310895.6177707,
+      "hash": "ec56ac88292ec19daa2a08bc7d7c2ca3"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\4e1e23074ddfa6ccb4f4029d6114dd40.json",
+    "last_updated": 1761919817.4612465,
+    "key_cached": true,
+    "key": "A Minor (8A)",
+    "key_confidence": 0.6639693093397674
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\2025-07-11_12h21m16.wav": {
+    "file_info": {
+      "size": 55812490,
+      "mtime": 1752226511.6531227,
+      "hash": "4d9f3c909aae5715d438e736207a0025"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\282ea76b9fdc0daf187c0024645dde5c.json",
+    "last_updated": 1761919817.7523105,
+    "key_cached": true,
+    "key": "F Minor (4A)",
+    "key_confidence": 0.2715022232160834
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Astrix & Tristan - Awake The Snake (Volcano On Mars Remix).mp3": {
+    "file_info": {
+      "size": 12064780,
+      "mtime": 1730199607.158192,
+      "hash": "22ae18048fbdaf0d9bcedfb2a182405e"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\4ff211574b0cd714e08219dc170b9681.json",
+    "last_updated": 1761919817.9857523,
+    "key_cached": true,
+    "key": "F# Minor (11A)",
+    "key_confidence": 0.892857362567745
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Astrix & Tristan - Awake the snake.mp3": {
+    "file_info": {
+      "size": 12494574,
+      "mtime": 1730199417.4299862,
+      "hash": "4ff6857f2684f37e8a6bfe1aa7fef5af"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\c5e3732b9849a86707e7355d942f9de1.json",
+    "last_updated": 1761919818.225963,
+    "key_cached": true,
+    "key": "F# Minor (11A)",
+    "key_confidence": 0.896779421357885
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Camelphat & Elderbrook \u2018Cola\u2019 [ ezmp3.cc ].mp3": {
+    "file_info": {
+      "size": 6691212,
+      "mtime": 1729942142.4881885,
+      "hash": "506cd274831931a1e80a4e58d93b68d6"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\f3fd7eefc121ec3cbb1755a2bb493ca0.json",
+    "last_updated": 1761919818.4630485,
+    "key_cached": true,
+    "key": "A# Minor (3A)",
+    "key_confidence": 0.6140320811250367
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Claptone - No Eyes (feat. Jaw) [ ezmp3.cc ].mp3": {
+    "file_info": {
+      "size": 6734038,
+      "mtime": 1729942142.4951882,
+      "hash": "ab2188a51050666903694f5b6319fbb8"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\526b487dab4bb91377a5777ccdb8fb70.json",
+    "last_updated": 1754840617.242759,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\526b487dab4bb91377a5777ccdb8fb70.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\526b487dab4bb91377a5777ccdb8fb70.pkl"
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Camelphat & Elderbrook \u2018Cola\u2019.mp3": {
+    "file_info": {
+      "size": 10015758,
+      "mtime": 1662020006.0,
+      "hash": "7d70e87c99e81cbf33191957fe4eb0b9"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\fc6b5d2ddad0227d5097c20e18cab245.json",
+    "last_updated": 1761919818.7040544,
+    "key_cached": true,
+    "key": "A# Minor (3A)",
+    "key_confidence": 0.6287350792882671
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Claptone - No Eyes (feat. Jaw) [ ezmp3.cc ].mp3": {
+    "file_info": {
+      "size": 6734038,
+      "mtime": 1729942142.4951882,
+      "hash": "ab2188a51050666903694f5b6319fbb8"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\ae5532de43956837b1d5aac4eba498eb.json",
+    "last_updated": 1761919818.9813957,
+    "key_cached": true,
+    "key": "G Minor (6A)",
+    "key_confidence": 0.2608560905529865
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Claptone - No Eyes feat. Jaw (OFFICIAL HD VERSION) - Exploited.mp3": {
+    "file_info": {
+      "size": 5878253,
+      "mtime": 1662622724.0,
+      "hash": "65978ed7b3542113ebe6122f5c2268e9"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\cfe1303a9f6a65511f9ad3181a51e011.json",
+    "last_updated": 1761919819.2139404,
+    "key_cached": true,
+    "key": "G Minor (6A)",
+    "key_confidence": 0.3330106687915249
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\COLANEWBORNNOEYES.wav": {
+    "file_info": {
+      "size": 46568388,
+      "mtime": 1752227349.2607238,
+      "hash": "e1fd6abc408764138b82aba3bcb0b0bf"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\1e2804cb3a07640af4d58f9c53c523d0.json",
+    "last_updated": 1761919819.464395,
+    "key_cached": true,
+    "key": "F# Minor (11A)",
+    "key_confidence": 0.2844008897316309
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\MY-first-mix-2025.wav": {
+    "file_info": {
+      "size": 41009196,
+      "mtime": 1752227345.6018527,
+      "hash": "b854fce1165c97e50c644a502bf825bf"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\ecfe21c65c2f73ef96cbcb1ead621d08.json",
+    "last_updated": 1761919819.7532878,
+    "key_cached": true,
+    "key": "G# Minor (1A)",
+    "key_confidence": 0.26747140527084007
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\New Born - Heart Of Fire.mp3": {
+    "file_info": {
+      "size": 19479828,
+      "mtime": 1752660655.781,
+      "hash": "8d7fa8fed534e305d0f4c21a832f8207"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\befb3542ed256a513068ad8c9bef0f0b.json",
+    "last_updated": 1761919820.0135083,
+    "key_cached": true,
+    "key": "F Major (7B)",
+    "key_confidence": 0.6298213118330436
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\New Born - Lemonades.mp3": {
+    "file_info": {
+      "size": 17478425,
+      "mtime": 1752660863.2427752,
+      "hash": "ce05e48e3c06e444313b61e974b11e11"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\d7a5d1512b3f8d251ee78f7ff650a6e0.json",
+    "last_updated": 1761919820.2668214,
+    "key_cached": true,
+    "key": "B Minor (10A)",
+    "key_confidence": 0.7235620541812517
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\New Born - Point (Original HQ Mix).wav": {
+    "file_info": {
+      "size": 88954398,
+      "mtime": 1752224996.0406036,
+      "hash": "e9753724219818b60486eafed75ff42c"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\4b771e7d82a21bd7b33f9607b4f9a27e.json",
+    "last_updated": 1761919820.596558,
+    "key_cached": true,
+    "key": "F# Major (2B)",
+    "key_confidence": 0.6165680972459718
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\New Born - The Sweetest Thing.mp3": {
+    "file_info": {
+      "size": 20183282,
+      "mtime": 1752660760.15119,
+      "hash": "99c5bf9aee40240478ebeb303bceed63"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\c4769796306119f379ed0dd3cd2ba850.json",
+    "last_updated": 1761919820.8474348,
+    "key_cached": true,
+    "key": "G Minor (6A)",
+    "key_confidence": 0.6731162398666747
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\No-eyes.cola.new-born.wav": {
+    "file_info": {
+      "size": 50731760,
+      "mtime": 1752227015.884159,
+      "hash": "3088f5d5c662b0412045b84bee520a35"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\d2de05caa478cf8949ff0ff9c1762f40.json",
+    "last_updated": 1761919821.1405678,
+    "key_cached": true,
+    "key": "F Minor (4A)",
+    "key_confidence": 0.29374462649450345
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Propaganda Machine -Niros-Laptop.mp3": {
+    "file_info": {
+      "size": 5743542,
+      "mtime": 1715925160.8208964,
+      "hash": "bf73227e5fd41de56f1377860477ee98"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\0c3ed35c1fbcd2742e79c1e9690bb7eb.json",
+    "last_updated": 1761919821.3956962,
+    "key_cached": true,
+    "key": "A Minor (8A)",
+    "key_confidence": 0.6508609333457004
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Propaganda Machine .mp3": {
+    "file_info": {
+      "size": 5743542,
+      "mtime": 1663429516.0,
+      "hash": "6822bb0ad69623a8b8bcab19acf34397"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\056e8cbf17a8028904da8052d1007de6.json",
+    "last_updated": 1761919821.633306,
+    "key_cached": true,
+    "key": "A Minor (8A)",
+    "key_confidence": 0.6508609333457004
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\See The Lies.mp3": {
+    "file_info": {
+      "size": 7636935,
+      "mtime": 1663429516.0,
+      "hash": "b50f36a557d985ec3a111a54e077926e"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\824adc084c903678427945cad7a41460.json",
+    "last_updated": 1756558581.1653137
+  },
+  "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\\u05e8\u05d1\u05d9\u05d1 \u05db\u05e0\u05e8 - \u05de\u05d9\u05dd \u05e2\u05de\u05d5\u05e7\u05d9\u05dd.mp3": {
+    "file_info": {
+      "size": 8821698,
+      "mtime": 1649607643.0,
+      "hash": "a68a32082cf677c7d3fb825b4600cd74"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\07cc0bb94a126d96e80c0a40cb3ac469.json",
+    "last_updated": 1761919821.8797283,
+    "key_cached": true,
+    "key": "F Minor (4A)",
+    "key_confidence": 0.7790170344469057
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\2024-10-29_12h49m07.wav": {
+    "file_info": {
+      "size": 78632026,
+      "mtime": 1730199607.2763164,
+      "hash": "c365307b232a0515ebac6ffd19d69b15"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\4dfe00001f456946e38d2853c2209e91.json",
+    "last_updated": 1761917197.1680207,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\4dfe00001f456946e38d2853c2209e91.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\4dfe00001f456946e38d2853c2209e91.pkl",
+    "key_cached": true,
+    "key": "D# Minor (2A)",
+    "key_confidence": 0.6200541318454471
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\\u05e8\u05d1\u05d9\u05d1 \u05db\u05e0\u05e8 - \u05de\u05d9\u05dd \u05e2\u05de\u05d5\u05e7\u05d9\u05dd.mp3": {
+    "file_info": {
+      "size": 8821698,
+      "mtime": 1649607643.0,
+      "hash": "a68a32082cf677c7d3fb825b4600cd74"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\e3eaeecd61f235f966a41396bfc1240d.json",
+    "last_updated": 1761917248.4879131,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\e3eaeecd61f235f966a41396bfc1240d.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\e3eaeecd61f235f966a41396bfc1240d.pkl",
+    "key_cached": true,
+    "key": "F Minor (4A)",
+    "key_confidence": 0.7790173160120474
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\See The Lies.mp3": {
+    "file_info": {
+      "size": 7636935,
+      "mtime": 1663429516.0,
+      "hash": "b50f36a557d985ec3a111a54e077926e"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\4510c57feced5aed38d96db68844f242.json",
+    "last_updated": 1756560703.5007873,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\4510c57feced5aed38d96db68844f242.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\4510c57feced5aed38d96db68844f242.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\New Born - Lemonades.mp3": {
+    "file_info": {
+      "size": 17478425,
+      "mtime": 1752660863.2427752,
+      "hash": "ce05e48e3c06e444313b61e974b11e11"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\6e4d796958b0e0ff0738ad4531523b56.json",
+    "last_updated": 1756565119.2020807,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\6e4d796958b0e0ff0738ad4531523b56.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\6e4d796958b0e0ff0738ad4531523b56.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Claptone - No Eyes feat. Jaw (OFFICIAL HD VERSION) - Exploited.mp3": {
+    "file_info": {
+      "size": 5878253,
+      "mtime": 1662622724.0,
+      "hash": "65978ed7b3542113ebe6122f5c2268e9"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\6e245f2b90e3607bd9f2d3941a5c0bac.json",
+    "last_updated": 1756565451.6327238,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\6e245f2b90e3607bd9f2d3941a5c0bac.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\6e245f2b90e3607bd9f2d3941a5c0bac.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\New Born - Heart Of Fire.mp3": {
+    "file_info": {
+      "size": 19479828,
+      "mtime": 1752660655.781,
+      "hash": "8d7fa8fed534e305d0f4c21a832f8207"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\adb63236c50a309751478c23b3f8d62f.json",
+    "last_updated": 1756565832.754974,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\adb63236c50a309751478c23b3f8d62f.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\adb63236c50a309751478c23b3f8d62f.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\New Born - The Sweetest Thing.mp3": {
+    "file_info": {
+      "size": 20183282,
+      "mtime": 1752660760.15119,
+      "hash": "99c5bf9aee40240478ebeb303bceed63"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\c72d867ab14c4ee917a634fdd4c2b1d7.json",
+    "last_updated": 1757409451.7686508,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\c72d867ab14c4ee917a634fdd4c2b1d7.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\c72d867ab14c4ee917a634fdd4c2b1d7.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Propaganda Machine .mp3": {
+    "file_info": {
+      "size": 5743542,
+      "mtime": 1663429516.0,
+      "hash": "6822bb0ad69623a8b8bcab19acf34397"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\894fb61b90f10931f81461080e85db3e.json",
+    "last_updated": 1761918467.0108008,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\894fb61b90f10931f81461080e85db3e.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\894fb61b90f10931f81461080e85db3e.pkl",
+    "key_cached": true,
+    "key": "A Minor (8A)",
+    "key_confidence": 0.6508609392854171
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Propaganda Machine -Niros-Laptop.mp3": {
+    "file_info": {
+      "size": 5743542,
+      "mtime": 1715925160.8208964,
+      "hash": "bf73227e5fd41de56f1377860477ee98"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\f31c3169dea59a529d9b346f69957e24.json",
+    "last_updated": 1757528684.5419483,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\f31c3169dea59a529d9b346f69957e24.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\f31c3169dea59a529d9b346f69957e24.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\No-eyes.cola.new-born.wav": {
+    "file_info": {
+      "size": 50731760,
+      "mtime": 1752227015.884159,
+      "hash": "3088f5d5c662b0412045b84bee520a35"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\516b8d4f70edd71cbe2f2b5f25a47a12.json",
+    "last_updated": 1761920090.908906,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\516b8d4f70edd71cbe2f2b5f25a47a12.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\516b8d4f70edd71cbe2f2b5f25a47a12.pkl",
+    "key_cached": true,
+    "key": "F Minor (4A)",
+    "key_confidence": 0.2937446472869854
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\New Born - Point (Original HQ Mix).wav": {
+    "file_info": {
+      "size": 88954398,
+      "mtime": 1752224996.0406036,
+      "hash": "e9753724219818b60486eafed75ff42c"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\f7cc92927c936ab05a0bfa1b5592d279.json",
+    "last_updated": 1757528946.9136467,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\f7cc92927c936ab05a0bfa1b5592d279.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\f7cc92927c936ab05a0bfa1b5592d279.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\2025-06-07_18h38m20.wav": {
+    "file_info": {
+      "size": 37470252,
+      "mtime": 1749310895.6177707,
+      "hash": "ec56ac88292ec19daa2a08bc7d7c2ca3"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\b25dc9aaeb89d9ac3be0c86113b0290a.json",
+    "last_updated": 1757580947.3144472,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\b25dc9aaeb89d9ac3be0c86113b0290a.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\b25dc9aaeb89d9ac3be0c86113b0290a.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Astrix & Tristan - Awake The Snake (Volcano On Mars Remix).mp3": {
+    "file_info": {
+      "size": 12064780,
+      "mtime": 1730199607.158192,
+      "hash": "22ae18048fbdaf0d9bcedfb2a182405e"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\0b2105dd54a3c46d8627584ec2f9f22d.json",
+    "last_updated": 1757581004.773472,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\0b2105dd54a3c46d8627584ec2f9f22d.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\0b2105dd54a3c46d8627584ec2f9f22d.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\COLANEWBORNNOEYES.wav": {
+    "file_info": {
+      "size": 46568388,
+      "mtime": 1752227349.2607238,
+      "hash": "e1fd6abc408764138b82aba3bcb0b0bf"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\b02f2164f88092f5e4b37e4b638783b7.json",
+    "last_updated": 1761917813.8414896,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\b02f2164f88092f5e4b37e4b638783b7.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\b02f2164f88092f5e4b37e4b638783b7.pkl",
+    "key_cached": true,
+    "key": "F# Minor (11A)",
+    "key_confidence": 0.28440084003940463
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\MY-first-mix-2025.wav": {
+    "file_info": {
+      "size": 41009196,
+      "mtime": 1752227345.6018527,
+      "hash": "b854fce1165c97e50c644a502bf825bf"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\7772b2dc65229ecd19aa438232df8258.json",
+    "last_updated": 1757581078.699251,
+    "waveform_cached": true,
+    "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\7772b2dc65229ecd19aa438232df8258.npz",
+    "fft_cached": true,
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\7772b2dc65229ecd19aa438232df8258.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Camelphat & Elderbrook \u2018Cola\u2019.mp3": {
+    "file_info": {
+      "size": 10015758,
+      "mtime": 1662020006.0,
+      "hash": "7d70e87c99e81cbf33191957fe4eb0b9"
+    },
+    "bpm_cached": true,
+    "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\4eacbab7d2fada88bc80b9acad83f63e.json",
+    "last_updated": 1761919849.047609,
+    "key_cached": true,
+    "key": "A# Minor (3A)",
+    "key_confidence": 0.6287346705423562,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MyMixLab\\DjApp\\cache\\waveforms\\4eacbab7d2fada88bc80b9acad83f63e.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MyMixLab\\DjApp\\cache\\fft\\4eacbab7d2fada88bc80b9acad83f63e.pkl"
+  }
+}
