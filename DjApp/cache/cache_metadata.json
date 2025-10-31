@@ -360,11 +360,14 @@
     },
     "bpm_cached": true,
     "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\6e245f2b90e3607bd9f2d3941a5c0bac.json",
-    "last_updated": 1756565451.6327238,
+    "last_updated": 1761928176.2043056,
     "waveform_cached": true,
     "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\6e245f2b90e3607bd9f2d3941a5c0bac.npz",
     "fft_cached": true,
-    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\6e245f2b90e3607bd9f2d3941a5c0bac.pkl"
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\6e245f2b90e3607bd9f2d3941a5c0bac.pkl",
+    "key_cached": true,
+    "key": "G Minor (6A)",
+    "key_confidence": 0.33301007752303885
   },
   "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\New Born - Heart Of Fire.mp3": {
     "file_info": {
