@@ -77,9 +77,10 @@ class Turntable(QWidget):
         self._glow_timer.timeout.connect(self._update_glow)
         self._glow_timer.start(50)  # 20 FPS
 
-        # Styling
+        # Styling - OPTIMIZED SIZE for side-by-side layout
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setMinimumSize(150, 150)
+        self.setMinimumSize(150, 150)  # Large but fits with loop controls
+        self.setMaximumSize(150, 150)  # Fixed size for consistent layout
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, Qt.GlobalColor.transparent)
@@ -224,12 +225,12 @@ class Turntable(QWidget):
                                          primary_color.blue(), 
                                          120))
         
-        # Draw main line with enhanced thickness
-        painter.setPen(QPen(QBrush(line_gradient), 3))
+        # Draw main line with thicker stroke for larger turntable
+        painter.setPen(QPen(QBrush(line_gradient), 4))  # Thicker for visibility
         painter.drawLine(QPointF(0, -hub_radius), QPointF(0, -radius))
 
         # Add enhanced glow effect (always visible)
-        glow_pen = QPen(self.colors['glow'], 6)
+        glow_pen = QPen(self.colors['glow'], 7)  # Stronger glow for larger size
         glow_pen.setColor(QColor(primary_color.red(),
                                primary_color.green(),
                                primary_color.blue(),
@@ -243,8 +244,8 @@ class Turntable(QWidget):
         if self.current_pitch != 0:
             pitch_text = f"{self.current_pitch:+.1f}%"
             painter.setPen(QPen(self.colors['primary']))
-            painter.setFont(QFont("Arial", 10))
-            painter.drawText(QRectF(0, height - 20, width, 20), 
+            painter.setFont(QFont("Arial", 11, QFont.Weight.Bold))  # Adjusted font for medium turntable
+            painter.drawText(QRectF(0, height - 18, width, 18), 
                            Qt.AlignmentFlag.AlignCenter, pitch_text)
 
         # Add hover effect

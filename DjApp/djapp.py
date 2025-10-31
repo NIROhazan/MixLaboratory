@@ -991,10 +991,7 @@ class DJApp(QMainWindow):
                            QMessageBox.warning(self, "Sync Error", "Both decks must have tracks loaded and analyzed to sync.")
                            return
                            
-                       # --- Beat Matching Logic --- 
-                       # Initialize target position in case beat matching fails
-                       target_pos_for_worker = None 
-                       
+                       # --- Enhanced Beat Matching Logic --- 
                        master_pos = other_deck.player.position()
                        slave_pos = this_deck.player.position()
 
@@ -1003,27 +1000,36 @@ class DJApp(QMainWindow):
 
                        target_slave_pos = None
                        if master_closest_beat_time is not None and slave_closest_beat_time is not None:
+                           # Calculate the phase within the beat grid for master
                            master_offset = master_pos - master_closest_beat_time
                            slave_offset = slave_pos - slave_closest_beat_time
+                           
+                           # Calculate adjustment needed to align beats perfectly
                            adjustment = master_offset - slave_offset
-                           # Calculate target position, ensuring it's within valid bounds (0 to duration)
+                           
+                           # Calculate target position with smooth alignment
                            duration_ms = this_deck.player.duration()
-                           calculated_target = slave_pos - adjustment
+                           calculated_target = slave_pos + adjustment
+                           
                            if duration_ms > 0:
                                target_slave_pos = max(0, min(int(calculated_target), duration_ms))
                            else:
                                target_slave_pos = max(0, int(calculated_target))
                                
-                           print(f"Beat Sync: Master Pos={master_pos}ms, Closest Master Beat={master_closest_beat_time}ms, Offset={master_offset}ms")
-                           print(f"Beat Sync: Slave Pos={slave_pos}ms, Closest Slave Beat={slave_closest_beat_time}ms, Offset={slave_offset}ms")
-                           print(f"Beat Sync: Adjustment={adjustment}ms, Calculated Target={calculated_target}ms, Final Target={target_slave_pos}ms")
+                           print(f"🎵 Beat Sync: Master Pos={master_pos}ms, Master Beat={master_closest_beat_time}ms, Phase={master_offset}ms")
+                           print(f"🎵 Beat Sync: Slave Pos={slave_pos}ms, Slave Beat={slave_closest_beat_time}ms, Phase={slave_offset}ms")
+                           print(f"🎵 Beat Sync: Adjustment={adjustment}ms → Moving to {target_slave_pos}ms for perfect alignment")
+                           
+                           # If currently playing, apply the position immediately for instant sync
+                           if this_deck.is_playing:
+                               this_deck.player.setPosition(target_slave_pos)
+                               print(f"✓ Instant beat alignment applied to playing deck")
                        else:
-                           print("Beat Sync: Could not find closest beats for alignment. Syncing BPM only.")
-                           target_pos_for_worker = None # Fallback to just BPM sync
+                           print("⚠ Beat Sync: Could not find closest beats for alignment. Syncing BPM only.")
                        
                        print(f"Applying Master BPM ({master_bpm}) to Deck {deck_number}.")
-                       # Apply tempo change AND pass calculated target position for beat matching
-                       this_deck.set_deck_tempo(master_bpm, target_position_after_load=target_pos_for_worker)
+                       # Apply tempo change with the calculated target position for perfect beat matching
+                       this_deck.set_deck_tempo(master_bpm, target_position_after_load=target_slave_pos)
                        self.update_sync_button_style(deck_number, "synced") # Update style after attempting
                   else:
                        print(f"Cannot sync Deck {deck_number}: Master Deck {self.sync_master} has invalid BPM ({master_bpm})")
@@ -1058,16 +1064,66 @@ class DJApp(QMainWindow):
 
         if state == "master":
              deck.sync_button.setText("MASTER")
-             deck.sync_button.setProperty("class", "syncMaster")
-             deck.sync_button.style().unpolish(deck.sync_button)
-             deck.sync_button.style().polish(deck.sync_button)
+             # Apply direct inline styling for guaranteed blue color
+             deck.sync_button.setStyleSheet("""
+                 QPushButton {
+                     background: qlineargradient(
+                         spread:pad, x1:0, y1:0, x2:0, y2:1,
+                         stop:0 rgba(0, 150, 255, 0.95),
+                         stop:1 rgba(0, 120, 255, 0.85)
+                     );
+                     color: #ffffff;
+                     border: 3px solid #0096ff;
+                     border-radius: 16px;
+                     padding: 10px 20px;
+                     font-size: 14px;
+                     font-weight: 800;
+                     min-height: 24px;
+                     min-width: 80px;
+                     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                 }
+                 QPushButton:hover {
+                     background: qlineargradient(
+                         spread:pad, x1:0, y1:0, x2:0, y2:1,
+                         stop:0 rgba(0, 170, 255, 1.0),
+                         stop:1 rgba(0, 140, 255, 0.95)
+                     );
+                     border: 4px solid #00b4ff;
+                 }
+             """)
         elif state == "synced":
              deck.sync_button.setText("SYNCED")
-             deck.sync_button.setProperty("class", "syncSynced")
-             deck.sync_button.style().unpolish(deck.sync_button)
-             deck.sync_button.style().polish(deck.sync_button)
+             # Apply direct inline styling for guaranteed blue color
+             deck.sync_button.setStyleSheet("""
+                 QPushButton {
+                     background: qlineargradient(
+                         spread:pad, x1:0, y1:0, x2:0, y2:1,
+                         stop:0 rgba(0, 150, 255, 0.95),
+                         stop:1 rgba(0, 120, 255, 0.85)
+                     );
+                     color: #ffffff;
+                     border: 3px solid #0096ff;
+                     border-radius: 16px;
+                     padding: 10px 20px;
+                     font-size: 14px;
+                     font-weight: 800;
+                     min-height: 24px;
+                     min-width: 80px;
+                     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                 }
+                 QPushButton:hover {
+                     background: qlineargradient(
+                         spread:pad, x1:0, y1:0, x2:0, y2:1,
+                         stop:0 rgba(0, 170, 255, 1.0),
+                         stop:1 rgba(0, 140, 255, 0.95)
+                     );
+                     border: 4px solid #00b4ff;
+                 }
+             """)
         else: # Default state
              deck.sync_button.setText("SYNC")
+             # Reset to default styling
+             deck.sync_button.setStyleSheet("")
              deck.sync_button.setProperty("class", "syncDefault")
              deck.sync_button.style().unpolish(deck.sync_button)
              deck.sync_button.style().polish(deck.sync_button)
@@ -1627,6 +1683,9 @@ class DJApp(QMainWindow):
         self.automix_playlist = playlist
         self.automix_current_index = 0
         self.automix_active = True
+        self._automix_crossfading = False
+        
+        print(f"AutoMix: Loading playlist with {len(playlist)} tracks")
         
         # Load first track into deck 1
         first_track = playlist[0]
@@ -1636,15 +1695,25 @@ class DJApp(QMainWindow):
         if len(playlist) > 1:
             second_track = playlist[1]
             self.deck2.load_file(second_track.file_path)
+            print(f"AutoMix: Preloaded track 2 into Deck 2")
         
         # Start auto-mix monitoring
         self.automix_timer.start(1000)  # Check every second
         
+        # Auto-start playback after a short delay (to ensure files are loaded)
+        QTimer.singleShot(1500, self._start_automix_playback)
+        
         QMessageBox.information(
             self,
             "Auto-Mix Started",
-            f"Loaded {len(playlist)} tracks. Auto-mix will handle transitions automatically."
+            f"Loaded {len(playlist)} tracks. Auto-mix will begin playback automatically."
         )
+    
+    def _start_automix_playback(self):
+        """Start playback of the first track in automix."""
+        if self.automix_active and not self.deck1.is_playing:
+            print("AutoMix: Starting playback of first track")
+            self.deck1.toggle_playback()
     
     def _automix_check_transition(self):
         """
@@ -1658,32 +1727,65 @@ class DJApp(QMainWindow):
         deck1_playing = self.deck1.is_playing
         deck2_playing = self.deck2.is_playing
         
+        # Debug info
+        if deck1_playing or deck2_playing:
+            current_idx = self.automix_current_index
+            total_tracks = len(self.automix_playlist)
+            print(f"AutoMix Monitor: Deck1={deck1_playing}, Deck2={deck2_playing}, Track {current_idx+1}/{total_tracks}")
+        
+        # If both decks stopped, something went wrong
+        if not deck1_playing and not deck2_playing:
+            print("AutoMix: WARNING - Both decks stopped!")
+            # Don't stop immediately, maybe they're loading
+            return
+        
         # Get current deck's position and duration
-        if deck1_playing:
+        if deck1_playing and not deck2_playing:
             current_deck = self.deck1
             next_deck = self.deck2
             current_position = current_deck.player.position()
             current_duration = current_deck.player.duration()
+            
+            # Check if next deck has a track loaded and ready
+            if not next_deck.current_file:
+                print(f"AutoMix: Waiting for Deck 2 to have a track loaded...")
+                return  # Wait for track to be loaded
             
             # Time remaining until crossfade should start
             time_remaining = current_duration - current_position
             crossfade_start_time = self.automix_crossfade_duration * 1000  # Convert to ms
             
             if time_remaining <= crossfade_start_time and time_remaining > 0:
-                # Start crossfade
-                self._start_automix_crossfade(current_deck, next_deck)
+                # Prevent multiple crossfades
+                if not hasattr(self, '_automix_crossfading') or not self._automix_crossfading:
+                    print(f"AutoMix: Triggering crossfade - {time_remaining}ms remaining")
+                    self._automix_crossfading = True
+                    self._start_automix_crossfade(current_deck, next_deck)
         
-        elif deck2_playing:
+        elif deck2_playing and not deck1_playing:
             current_deck = self.deck2
             next_deck = self.deck1
             current_position = current_deck.player.position()
             current_duration = current_deck.player.duration()
             
+            # Check if next deck has a track loaded and ready
+            if not next_deck.current_file:
+                print(f"AutoMix: Waiting for Deck 1 to have a track loaded...")
+                return  # Wait for track to be loaded
+            
             time_remaining = current_duration - current_position
             crossfade_start_time = self.automix_crossfade_duration * 1000
             
             if time_remaining <= crossfade_start_time and time_remaining > 0:
-                self._start_automix_crossfade(current_deck, next_deck)
+                # Prevent multiple crossfades
+                if not hasattr(self, '_automix_crossfading') or not self._automix_crossfading:
+                    print(f"AutoMix: Triggering crossfade - {time_remaining}ms remaining")
+                    self._automix_crossfading = True
+                    self._start_automix_crossfade(current_deck, next_deck)
+        
+        # If both decks are playing (during crossfade), don't trigger another transition
+        elif deck1_playing and deck2_playing:
+            return
     
     def _start_automix_crossfade(self, current_deck, next_deck):
         """
@@ -1694,18 +1796,25 @@ class DJApp(QMainWindow):
             next_deck: Deck to fade in.
         """
         # Move to next track in playlist
+        old_index = self.automix_current_index
         self.automix_current_index += 1
+        
+        print(f"AutoMix: Crossfade started - transitioning from track {old_index+1} to track {self.automix_current_index+1}")
+        print(f"AutoMix: Playlist has {len(self.automix_playlist)} tracks total")
         
         if self.automix_current_index >= len(self.automix_playlist):
             # Playlist finished
+            print("AutoMix: Reached end of playlist!")
             self.automix_active = False
             self.automix_timer.stop()
             QMessageBox.information(self, "Auto-Mix Complete", "Playlist finished!")
             return
         
         # Start next deck if not already playing
+        print(f"AutoMix: Starting Deck {next_deck.deck_number} (currently playing: {next_deck.is_playing})")
         if not next_deck.is_playing:
             next_deck.toggle_playback()
+            print(f"AutoMix: Deck {next_deck.deck_number} playback toggled")
         
         # Perform smooth crossfade over specified duration
         # This is a simple implementation - could be enhanced with volume curves
@@ -1718,24 +1827,49 @@ class DJApp(QMainWindow):
         def crossfade_step(step_num):
             if step_num >= crossfade_steps:
                 # Crossfade complete - load next track if available
-                current_deck.toggle_playback()  # Stop current deck
+                print(f"AutoMix: Crossfade complete, stopping {current_deck.deck_number}, continuing on Deck {next_deck.deck_number}")
                 
-                # Load next track into the now-free deck
+                # Stop current deck
+                if current_deck.is_playing:
+                    current_deck.toggle_playback()
+                
+                # Reset volume for both decks
+                current_deck.set_volume(current_volume)
+                next_deck.set_volume(1.0)
+                
+                # Load next track into the now-free deck if available
                 if self.automix_current_index + 1 < len(self.automix_playlist):
                     next_track = self.automix_playlist[self.automix_current_index + 1]
+                    print(f"AutoMix: Loading next track into Deck {current_deck.deck_number}: {next_track.filename}")
                     current_deck.load_file(next_track.file_path)
+                else:
+                    print(f"AutoMix: No more tracks to load, current track will be the last")
+                
+                # Ensure automix timer continues running for next transition
+                if self.automix_active and not self.automix_timer.isActive():
+                    print("AutoMix: Restarting timer to monitor next transition")
+                    self.automix_timer.start(1000)  # Check every second
+                
+                # Reset crossfading flag to allow next transition
+                self._automix_crossfading = False
+                print("AutoMix: Ready for next transition")
                 
                 return
             
-            # Calculate volume levels
+            # Calculate volume levels with smooth logarithmic curve
             fade_progress = step_num / crossfade_steps
-            current_deck.set_volume(current_volume * (1.0 - fade_progress))
-            next_deck.set_volume(fade_progress)
+            # Smooth crossfade using power curve
+            current_volume_level = current_volume * ((1.0 - fade_progress) ** 2)
+            next_volume_level = fade_progress ** 0.5
+            
+            current_deck.set_volume(max(0.0, current_volume_level))
+            next_deck.set_volume(min(1.0, next_volume_level))
             
             # Schedule next step
             QTimer.singleShot(step_duration, lambda: crossfade_step(step_num + 1))
         
         # Start crossfade
+        print(f"AutoMix: Starting crossfade from Deck {current_deck.deck_number} to Deck {next_deck.deck_number}")
         crossfade_step(0)
 
     def show_settings_dialog(self):

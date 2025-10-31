@@ -363,9 +363,22 @@ class DeckWidget(GlassWidget):
         
         self.track_label = QLabel("No track loaded")
         self.track_label.setObjectName("displayLabel")
-        self.track_label.setWordWrap(False)  # No wrap for extreme compact
-        self.track_label.setMaximumHeight(16)  # EXTREME: 20 → 16
-        self.track_label.setStyleSheet("font-size: 9px; padding: 1px;")  # Tiny font
+        self.track_label.setWordWrap(False)  # Single line for better visibility
+        self.track_label.setMinimumHeight(24)  # Make it taller for visibility
+        self.track_label.setMaximumHeight(24)
+        self.track_label.setStyleSheet("""
+            font-size: 13px; 
+            font-weight: bold; 
+            padding: 4px 8px;
+            color: #f3cf2c;
+            background: qlineargradient(
+                spread:pad, x1:0, y1:0, x2:1, y2:0,
+                stop:0 rgba(50, 50, 50, 0.95),
+                stop:1 rgba(40, 40, 40, 0.95)
+            );
+            border: 2px solid rgba(243, 207, 44, 0.4);
+            border-radius: 8px;
+        """)  # Big, bold, and visible
         
         self.waveform = WaveformDisplay()
         self.waveform.set_audio_analyzer_with_cache(self.audio_analyzer)
@@ -381,9 +394,9 @@ class DeckWidget(GlassWidget):
         viz_layout.setContentsMargins(0, 0, 0, 0)  # No margins
         viz_layout.setSpacing(0)  # Zero spacing
         
-        # Set maximum heights - EXTREME COMPACT for absolute no scrolling
-        self.waveform.setMaximumHeight(45)  # EXTREME: 60 → 45
-        self.spectrogram.setMaximumHeight(35)  # EXTREME: 50 → 35
+        # Set maximum heights - ULTRA MINIMAL for absolute no scrolling
+        self.waveform.setMaximumHeight(35)  # ULTRA MINIMAL: 45 → 35
+        self.spectrogram.setMaximumHeight(25)  # ULTRA MINIMAL: 35 → 25
         
         viz_layout.addWidget(self.waveform)
         viz_layout.addWidget(self.spectrogram)
@@ -402,7 +415,8 @@ class DeckWidget(GlassWidget):
         self.volume_slider.setMinimum(0)
         self.volume_slider.setMaximum(100)
         self.volume_slider.setValue(100)
-        self.volume_slider.setMaximumHeight(30)  # EXTREME: 35 → 30
+        self.volume_slider.setMinimumHeight(60)  # Make it taller and more prominent
+        self.volume_slider.setMaximumHeight(80)  # Allow some flexibility
         self.volume_slider.setProperty("class", "volumeSliderNormal")
         self.volume_slider.valueChanged.connect(self.handle_volume_change)
         
@@ -415,13 +429,14 @@ class DeckWidget(GlassWidget):
         tempo_slider_label = QLabel("TEMPO")
         tempo_slider_label.setProperty("class", "neonText")
         tempo_slider_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        tempo_slider_label.setStyleSheet("font-size: 8px; font-weight: bold;")
+        tempo_slider_label.setStyleSheet("font-size: 9px; font-weight: bold;")
         
         self.tempo_slider = QSlider(Qt.Orientation.Vertical)
         self.tempo_slider.setMinimum(-16)  # -16% (like vinyl pitch control)
         self.tempo_slider.setMaximum(16)   # +16%
         self.tempo_slider.setValue(0)      # Center = original BPM
-        self.tempo_slider.setMaximumHeight(30)  # EXTREME: 35 → 30
+        self.tempo_slider.setMinimumHeight(60)  # Make it taller and more prominent
+        self.tempo_slider.setMaximumHeight(80)  # Allow some flexibility
         self.tempo_slider.setTickPosition(QSlider.TickPosition.TicksBothSides)
         self.tempo_slider.setTickInterval(4)
         self.tempo_slider.setProperty("class", "tempoSlider")
@@ -430,7 +445,7 @@ class DeckWidget(GlassWidget):
         self.tempo_percent_label = QLabel("0%")
         self.tempo_percent_label.setProperty("class", "neonText")
         self.tempo_percent_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.tempo_percent_label.setStyleSheet("font-size: 7px;")
+        self.tempo_percent_label.setStyleSheet("font-size: 9px; font-weight: bold;")
         
         tempo_slider_layout.addWidget(tempo_slider_label)
         tempo_slider_layout.addWidget(self.tempo_slider)
@@ -510,6 +525,7 @@ class DeckWidget(GlassWidget):
         self.progress = QSlider(Qt.Orientation.Horizontal)
         self.progress.setMinimum(0)
         self.progress.setMaximum(1000)
+        self.progress.setFixedHeight(20)  # Make timeline more prominent
         self.progress.setProperty("class", "progressSlider")
         self.progress.sliderMoved.connect(self.seek)
         self.progress.sliderPressed.connect(lambda: self.player.pause())
@@ -591,57 +607,76 @@ class DeckWidget(GlassWidget):
         layout.addWidget(controls_panel)
         layout.addWidget(self.progress)
         layout.addLayout(self.time_layout)
-        layout.addWidget(self.turntable)
-        layout.addWidget(self.sync_button)
         
-        # Add loop controls panel
+        # Add loop controls panel - COMPACT
         loop_panel = QWidget()
         loop_panel.setObjectName("glassPanel")
         loop_layout = QHBoxLayout(loop_panel)
-        loop_layout.setSpacing(10)
+        loop_layout.setSpacing(6)  # Reduced spacing
+        loop_layout.setContentsMargins(4, 2, 4, 2)  # Tight margins
         
-        loop_label = QLabel("Loop:")
+        loop_label = QLabel("LOOP")
         loop_label.setProperty("class", "neonText")
-        loop_label.setStyleSheet("font-size: 8px; padding: 0px;")  # Tiny font
-        loop_layout.addWidget(loop_label)
+        loop_label.setStyleSheet("font-size: 9px; padding: 0px; font-weight: bold;")
+        loop_layout.addWidget(loop_label, 0, Qt.AlignmentFlag.AlignCenter)
         
-        # Loop start input
+        # Loop start input - COMPACT
         start_layout = QVBoxLayout()
-        start_label = QLabel("Start (s)")
+        start_layout.setSpacing(2)
+        start_layout.setContentsMargins(0, 0, 0, 0)
+        start_label = QLabel("Start")
         start_label.setProperty("class", "neonText")
+        start_label.setStyleSheet("font-size: 8px;")
+        start_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.loop_start_input = QLineEdit("0.0")
-        self.loop_start_input.setFixedWidth(60)
+        self.loop_start_input.setFixedWidth(55)
+        self.loop_start_input.setFixedHeight(22)
         self.loop_start_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.loop_start_input.returnPressed.connect(self._update_loop_start)
         start_layout.addWidget(start_label)
         start_layout.addWidget(self.loop_start_input)
         loop_layout.addLayout(start_layout)
         
-        # Loop length input
+        # Loop length input - COMPACT
         length_layout = QVBoxLayout()
-        length_label = QLabel("Length (s)")
+        length_layout.setSpacing(2)
+        length_layout.setContentsMargins(0, 0, 0, 0)
+        length_label = QLabel("Length")
         length_label.setProperty("class", "neonText")
+        length_label.setStyleSheet("font-size: 8px;")
+        length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.loop_length_input = QLineEdit("4.0")
-        self.loop_length_input.setFixedWidth(60)
+        self.loop_length_input.setFixedWidth(55)
+        self.loop_length_input.setFixedHeight(22)
         self.loop_length_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.loop_length_input.returnPressed.connect(self._update_loop_length)
         length_layout.addWidget(length_label)
         length_layout.addWidget(self.loop_length_input)
         loop_layout.addLayout(length_layout)
         
-        # Loop toggle button
-        self.loop_button = QPushButton("Loop")
+        # Loop toggle button - COMPACT
+        self.loop_button = QPushButton("LOOP")
         self.loop_button.setCheckable(True)
         self.loop_button.setProperty("class", "neonBorder")
+        self.loop_button.setFixedHeight(48)  # Match the total height of label + input
         self.loop_button.clicked.connect(self.toggle_loop)
-        loop_layout.addWidget(self.loop_button)
+        loop_layout.addWidget(self.loop_button, 0, Qt.AlignmentFlag.AlignCenter)
         
-        layout.addWidget(loop_panel)  # Add loop panel here
-        layout.addWidget(self.turntable)
+        # Create horizontal layout for loop panel and turntable side by side
+        loop_turntable_row = QHBoxLayout()
+        loop_turntable_row.setSpacing(10)
+        loop_turntable_row.setContentsMargins(0, 0, 0, 0)
+        
+        # Add loop panel on the left
+        loop_turntable_row.addWidget(loop_panel)
+        
+        # Add turntable on the right (centered vertically)
+        self.turntable.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        loop_turntable_row.addWidget(self.turntable, 0, Qt.AlignmentFlag.AlignCenter)
+        
+        layout.addLayout(loop_turntable_row)  # Add the horizontal row
+        
         layout.addWidget(self.sync_button)
-        
-        layout.setStretchFactor(self.turntable, 1)
-        self.turntable.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         
     def _update_bpm_display(self, bpm):
         """
@@ -1797,66 +1832,56 @@ class DeckWidget(GlassWidget):
         except Exception as e:
             print(f"Deck {self.deck_number}: Error updating spectrogram EQ overlay: {e}")
         
-        # ⚡ REAL-TIME EQ: Apply instantly with volume-based approximation
+        # ⚡ REAL-TIME EQ: Apply instantly with true frequency filtering!
         self._apply_eq_realtime_instant()
-        
-        # Cancel any existing EQ background timer
-        if hasattr(self, '_eq_timer') and self._eq_timer.isActive():
-            self._eq_timer.stop()
-        
-        # Only do full processing for extreme EQ settings (>±30% from neutral)
-        needs_full_processing = (
-            abs(self._eq_bass_gain - 1.0) > 0.3 or
-            abs(self._eq_mid_gain - 1.0) > 0.3 or
-            abs(self._eq_treble_gain - 1.0) > 0.3
-        )
-        
-        if needs_full_processing and not eq_is_neutral:
-            # Create or restart timer for high-quality EQ processing (background)
-            if not hasattr(self, '_eq_timer'):
-                self._eq_timer = QTimer()
-                self._eq_timer.setSingleShot(True)
-                self._eq_timer.timeout.connect(lambda: self._apply_eq(reset_transitions=False))
-            
-            # Shorter delay for faster response
-            self._eq_timer.start(200)  # 200ms delay for background high-quality processing
         
         # Show immediate status update
         if hasattr(self, 'eq_status_label'):
             if eq_is_neutral:
-                self.eq_status_label.setText("EQ Neutral")
-                QTimer.singleShot(1000, lambda: self.eq_status_label.setVisible(False))
+                self.eq_status_label.setText("EQ: Neutral")
+                self.eq_status_label.setStyleSheet("color: #00ff9f;")
+                QTimer.singleShot(800, lambda: self.eq_status_label.setVisible(False))
             else:
-                self.eq_status_label.setText("EQ Pending...")
+                self.eq_status_label.setText("EQ: Active")
+                self.eq_status_label.setStyleSheet("color: #f3cf2c;")
                 self.eq_status_label.setVisible(True)
+                QTimer.singleShot(800, lambda: self.eq_status_label.setVisible(False))
 
 
     def _apply_eq_realtime_instant(self):
         """
-        Apply EQ changes INSTANTLY using volume-based approximation.
-        This provides immediate feedback while optional high-quality processing happens in background.
+        Apply EQ changes INSTANTLY by triggering immediate audio processing.
+        This provides real-time EQ response like professional DJ equipment.
         """
         try:
-            # Calculate overall gain based on EQ settings
-            # Average the three bands, weighted toward mid frequencies (most content)
+            # Check if we have a track loaded
+            if not self.current_file or not self.original_file_path:
+                return
+            
+            # Cancel any existing timers
+            if hasattr(self, '_eq_timer') and self._eq_timer.isActive():
+                self._eq_timer.stop()
+            
+            # Calculate overall gain for visual feedback
             avg_gain = (self._eq_bass_gain * 0.25 + 
                        self._eq_mid_gain * 0.50 + 
                        self._eq_treble_gain * 0.25)
-            
-            # Clamp to safe range
             avg_gain = max(0.0, min(2.0, avg_gain))
             
-            # Apply as a volume adjustment for instant feedback
-            # This isn't perfect EQ, but it's INSTANT and gives the user immediate response
-            current_volume = self._current_volume  # Preserve user's volume setting
+            # Apply volume feedback for instant perceived response
+            current_volume = self._current_volume
             effective_volume = current_volume * avg_gain
             effective_volume = max(0.0, min(1.0, effective_volume))
             
-            # Apply instantly via QAudioOutput
+            # Apply instantly via QAudioOutput for immediate audible feedback
             if hasattr(self, 'audio_output'):
                 self.audio_output.setVolume(effective_volume)
             
-            print(f"Deck {self.deck_number}: ⚡ EQ applied instantly (avg gain: {avg_gain:.2f})")
+            print(f"Deck {self.deck_number}: ⚡ EQ instant feedback applied (avg gain: {avg_gain:.2f})")
+            
+            # Trigger IMMEDIATE real EQ processing (no delay!)
+            # This will apply true frequency filtering very quickly
+            QTimer.singleShot(10, lambda: self._apply_eq(reset_transitions=False))
             
         except Exception as e:
             print(f"Deck {self.deck_number}: Error in instant EQ: {e}")

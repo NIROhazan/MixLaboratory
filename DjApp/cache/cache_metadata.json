@@ -20,11 +20,14 @@
     },
     "bpm_cached": true,
     "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\94df83c795a3b8ebc1e6ea9126876d14.json",
-    "last_updated": 1754840586.9874165,
+    "last_updated": 1761926755.4503605,
     "waveform_cached": true,
     "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\94df83c795a3b8ebc1e6ea9126876d14.npz",
     "fft_cached": true,
-    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\94df83c795a3b8ebc1e6ea9126876d14.pkl"
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\94df83c795a3b8ebc1e6ea9126876d14.pkl",
+    "key_cached": true,
+    "key": "A# Minor (3A)",
+    "key_confidence": 0.6140322147695336
   },
   "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\2025-06-07_18h38m20.wav": {
     "file_info": {
@@ -99,11 +102,14 @@
     },
     "bpm_cached": true,
     "bpm_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\526b487dab4bb91377a5777ccdb8fb70.json",
-    "last_updated": 1754840617.242759,
+    "last_updated": 1761926760.4458163,
     "waveform_cached": true,
     "waveform_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\526b487dab4bb91377a5777ccdb8fb70.npz",
     "fft_cached": true,
-    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\526b487dab4bb91377a5777ccdb8fb70.pkl"
+    "fft_file": "c:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\526b487dab4bb91377a5777ccdb8fb70.pkl",
+    "key_cached": true,
+    "key": "G Minor (6A)",
+    "key_confidence": 0.26085621004839227
   },
   "C:/Users/ASUS/OneDrive/\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4/NewMusic\\Camelphat & Elderbrook \u2018Cola\u2019.mp3": {
     "file_info": {
@@ -458,11 +464,14 @@
     },
     "bpm_cached": true,
     "bpm_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\bpm\\b25dc9aaeb89d9ac3be0c86113b0290a.json",
-    "last_updated": 1757580947.3144472,
+    "last_updated": 1761927006.198565,
     "waveform_cached": true,
     "waveform_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\waveforms\\b25dc9aaeb89d9ac3be0c86113b0290a.npz",
     "fft_cached": true,
-    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\b25dc9aaeb89d9ac3be0c86113b0290a.pkl"
+    "fft_file": "C:\\Cursor\\MixLab-Final\\MixLab\\DjApp\\cache\\fft\\b25dc9aaeb89d9ac3be0c86113b0290a.pkl",
+    "key_cached": true,
+    "key": "A Minor (8A)",
+    "key_confidence": 0.6639497378694823
   },
   "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\Astrix & Tristan - Awake The Snake (Volcano On Mars Remix).mp3": {
     "file_info": {
@@ -525,5 +534,22 @@
     "waveform_file": "c:\\Cursor\\MyMixLab\\DjApp\\cache\\waveforms\\4eacbab7d2fada88bc80b9acad83f63e.npz",
     "fft_cached": true,
     "fft_file": "c:\\Cursor\\MyMixLab\\DjApp\\cache\\fft\\4eacbab7d2fada88bc80b9acad83f63e.pkl"
+  },
+  "C:\\Users\\ASUS\\OneDrive\\\u05e9\u05d5\u05dc\u05d7\u05df \u05d4\u05e2\u05d1\u05d5\u05d3\u05d4\\NewMusic\\2025-07-11_12h21m16.wav": {
+    "file_info": {
+      "size": 55812490,
+      "mtime": 1752226511.6531227,
+      "hash": "4d9f3c909aae5715d438e736207a0025"
+    },
+    "bpm_cached": true,
+    "bpm_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\bpm\\bf9fae5773df84b29ad1b27724619c3f.json",
+    "last_updated": 1761927790.4766376,
+    "key_cached": true,
+    "key": "F Minor (4A)",
+    "key_confidence": 0.27150220371093325,
+    "waveform_cached": true,
+    "waveform_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\waveforms\\bf9fae5773df84b29ad1b27724619c3f.npz",
+    "fft_cached": true,
+    "fft_file": "c:\\Cursor\\MixLaboratory\\DjApp\\cache\\fft\\bf9fae5773df84b29ad1b27724619c3f.pkl"
   }
 }

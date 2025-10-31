@@ -61,17 +61,25 @@ class ThreeBandEQ:
         print(f"ThreeBandEQ initialised (sample_rate={self.sample_rate} Hz, pure-Python mode)")
     
     def _update_scipy_filters(self):
-        """Update scipy filter coefficients for fallback processing"""
+        """Update scipy filter coefficients for optimized processing"""
         try:
-            # Low-pass filter for bass (0-250 Hz)
-            self.bass_b, self.bass_a = signal.butter(4, self.bass_freq, btype='lowpass', fs=self.sample_rate)
+            # Use second-order sections (SOS) for better numerical stability and speed
+            # Low-pass filter for bass (0-250 Hz) - 3rd order for faster processing
+            self.bass_sos = signal.butter(3, self.bass_freq, btype='lowpass', fs=self.sample_rate, output='sos')
             
-            # Band-pass filter for mids (250-4000 Hz)
-            self.mid_b, self.mid_a = signal.butter(4, [self.mid_freq_low, self.mid_freq_high], 
+            # Band-pass filter for mids (250-4000 Hz) - 3rd order for faster processing
+            self.mid_sos = signal.butter(3, [self.mid_freq_low, self.mid_freq_high], 
+                                         btype='bandpass', fs=self.sample_rate, output='sos')
+            
+            # High-pass filter for treble (4000+ Hz) - 3rd order for faster processing
+            self.treble_sos = signal.butter(3, self.treble_freq, 
+                                           btype='highpass', fs=self.sample_rate, output='sos')
+            
+            # Keep old format for compatibility
+            self.bass_b, self.bass_a = signal.butter(3, self.bass_freq, btype='lowpass', fs=self.sample_rate)
+            self.mid_b, self.mid_a = signal.butter(3, [self.mid_freq_low, self.mid_freq_high], 
                                                  btype='bandpass', fs=self.sample_rate)
-            
-            # High-pass filter for treble (4000+ Hz)
-            self.treble_b, self.treble_a = signal.butter(4, self.treble_freq, 
+            self.treble_b, self.treble_a = signal.butter(3, self.treble_freq, 
                                                         btype='highpass', fs=self.sample_rate)
             
             # Create crossfade window for smooth transitions
@@ -141,7 +149,8 @@ class ThreeBandEQ:
             self._current_gains['mid'] = mid_gain
             self._current_gains['treble'] = treble_gain
             
-            print(f"EQ Processing: Bass: {bass_gain:.2f}, Mid: {mid_gain:.2f}, Treble: {treble_gain:.2f}")
+            # Reduced logging for faster perceived response
+            # print(f"⚡ EQ: Bass={bass_gain:.1f} Mid={mid_gain:.1f} Treble={treble_gain:.1f}")
             
             # Handle both mono and stereo audio
             if audio_data.ndim == 1:
@@ -209,10 +218,16 @@ class ThreeBandEQ:
             np.ndarray: Processed mono audio as numpy array.
         """
         try:
-            # Split frequencies into bands
-            bass = signal.lfilter(self.bass_b, self.bass_a, audio_data)
-            mid = signal.lfilter(self.mid_b, self.mid_a, audio_data)
-            treble = signal.lfilter(self.treble_b, self.treble_a, audio_data)
+            # Split frequencies into bands using optimized SOS filters (faster and more stable)
+            if hasattr(self, 'bass_sos'):
+                bass = signal.sosfilt(self.bass_sos, audio_data)
+                mid = signal.sosfilt(self.mid_sos, audio_data)
+                treble = signal.sosfilt(self.treble_sos, audio_data)
+            else:
+                # Fallback to traditional filters
+                bass = signal.lfilter(self.bass_b, self.bass_a, audio_data)
+                mid = signal.lfilter(self.mid_b, self.mid_a, audio_data)
+                treble = signal.lfilter(self.treble_b, self.treble_a, audio_data)
             
             # Process each band with its gain and combine
             # When a gain is 0, that frequency band is effectively muted
