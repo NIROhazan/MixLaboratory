@@ -1,5 +1,5 @@
-# MixLab
+# MixLabratory
 
-Owr Final Project in Computer Science
+Dj application Project
 
 Crossplatform for Windows / Linux / macOS

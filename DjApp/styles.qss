@@ -707,5 +707,171 @@ QDial[compact="true"] {
     max-height: 30px;
 }
 
+/* ═══════════════════ PROFESSIONAL DJ MIXER CONTROLS ═══════════════════ */
+
+/* Master Volume Slider - Vertical Fader Style */
+QSlider[class="masterVolumeSlider"]::groove:vertical {
+    width: 40px;
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(200, 80, 80, 0.4),
+        stop:0.2 rgba(243, 207, 44, 0.4),
+        stop:0.8 rgba(80, 200, 80, 0.4),
+        stop:1 rgba(40, 160, 40, 0.4)
+    );
+    border: 2px solid rgba(243, 207, 44, 0.5);
+    border-radius: 20px;
+}
+
+QSlider[class="masterVolumeSlider"]::handle:vertical {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(50, 50, 50, 0.95),
+        stop:0.5 rgba(243, 207, 44, 0.95),
+        stop:1 rgba(50, 50, 50, 0.95)
+    );
+    border: 3px solid #f3cf2c;
+    height: 35px;
+    width: 45px;
+    margin: 0 -5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+QSlider[class="masterVolumeSlider"]::handle:vertical:hover {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(80, 80, 80, 0.95),
+        stop:0.5 #f3cf2c,
+        stop:1 rgba(80, 80, 80, 0.95)
+    );
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 20px rgba(243, 207, 44, 0.8);
+}
+
+QSlider[class="masterVolumeSlider"]::sub-page:vertical {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(243, 207, 44, 0.2),
+        stop:1 rgba(80, 200, 80, 0.7)
+    );
+    border-radius: 18px;
+}
+
+/* Crossfader - Professional DJ Style */
+QSlider[class="crossfaderSlider"]::groove:horizontal {
+    height: 40px;
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(200, 80, 120, 0.4),
+        stop:0.5 rgba(60, 60, 60, 0.6),
+        stop:1 rgba(80, 120, 200, 0.4)
+    );
+    border: 3px solid rgba(243, 207, 44, 0.5);
+    border-radius: 20px;
+}
+
+QSlider[class="crossfaderSlider"]::handle:horizontal {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(80, 80, 80, 0.95),
+        stop:0.5 rgba(243, 207, 44, 0.95),
+        stop:1 rgba(60, 60, 60, 0.95)
+    );
+    border: 4px solid #f3cf2c;
+    width: 60px;
+    height: 45px;
+    margin: -5px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+QSlider[class="crossfaderSlider"]::handle:horizontal:hover {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(100, 100, 100, 0.95),
+        stop:0.5 #f3cf2c,
+        stop:1 rgba(80, 80, 80, 0.95)
+    );
+    border: 4px solid #ffffff;
+    box-shadow: 0 0 25px rgba(243, 207, 44, 0.9);
+}
+
+QSlider[class="crossfaderSlider"]::sub-page:horizontal {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(243, 207, 44, 0.7),
+        stop:1 rgba(243, 207, 44, 0.2)
+    );
+    border-radius: 17px;
+}
+
+/* Mixer Labels */
+QLabel[class="mixerLabel"] {
+    color: #f3cf2c;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(243, 207, 44, 0.6);
+    padding: 5px;
+}
+
+QLabel[class="volumeDisplay"] {
+    color: #00ff9f;
+    font-size: 16px;
+    font-weight: 800;
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(40, 40, 40, 0.9),
+        stop:1 rgba(30, 30, 30, 0.9)
+    );
+    border: 2px solid rgba(0, 255, 159, 0.5);
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-shadow: 0 0 12px rgba(0, 255, 159, 0.6);
+}
+
+QLabel[class="crossfaderDisplay"] {
+    color: #f3cf2c;
+    font-size: 16px;
+    font-weight: 800;
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(40, 40, 40, 0.9),
+        stop:1 rgba(30, 30, 30, 0.9)
+    );
+    border: 2px solid rgba(243, 207, 44, 0.5);
+    border-radius: 10px;
+    padding: 8px 16px;
+    text-shadow: 0 0 12px rgba(243, 207, 44, 0.6);
+    min-width: 100px;
+}
+
+/* Deck Indicators */
+QLabel[class="deckIndicator"] {
+    color: #888888;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+}
+
+QLabel[class="deckIndicatorActive"] {
+    color: #f3cf2c;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    text-shadow: 0 0 15px rgba(243, 207, 44, 0.8);
+}
+
+QLabel[class="deckIndicatorDimmed"] {
+    color: #444444;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+}
+
 /* ═══════════════════ END OF MODERN STYLES ═══════════════════ */
 

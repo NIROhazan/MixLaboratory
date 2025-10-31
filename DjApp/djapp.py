@@ -459,41 +459,6 @@ class DJApp(QMainWindow):
         top_controls_layout.addWidget(settings_button)
         top_controls_layout.addWidget(help_button)
         
-        # Add Master Volume and Crossfader to TOP (save vertical space)
-        master_label = QLabel("Master")
-        master_label.setProperty("class", "neonText")
-        master_label.setStyleSheet("font-size: 9px;")
-        self.master_volume_slider = QSlider(Qt.Orientation.Horizontal)
-        self.master_volume_slider.setMinimum(0)
-        self.master_volume_slider.setMaximum(100)
-        self.master_volume_slider.setValue(100)
-        self.master_volume_slider.setFixedHeight(15)  # Tiny slider
-        self.master_volume_slider.setMaximumWidth(80)  # Compact width
-        self.master_volume_slider.setProperty("class", "masterVolumeSlider")
-        self.master_volume_display = QLabel("100%")
-        self.master_volume_display.setProperty("class", "volumeDisplay")
-        self.master_volume_display.setStyleSheet("font-size: 8px;")
-        
-        crossfader_label = QLabel("X-Fade")
-        crossfader_label.setProperty("class", "neonText")
-        crossfader_label.setStyleSheet("font-size: 9px;")
-        self.crossfader = QSlider(Qt.Orientation.Horizontal)
-        self.crossfader.setMinimum(0)
-        self.crossfader.setMaximum(100)
-        self.crossfader.setValue(50)
-        self.crossfader.setFixedHeight(15)  # Tiny slider
-        self.crossfader.setMaximumWidth(100)  # Compact width
-        self.crossfader.setProperty("class", "crossfaderSlider")
-        self.crossfader_display = QLabel("50")
-        self.crossfader_display.setProperty("class", "neonText")
-        self.crossfader_display.setStyleSheet("font-size: 8px;")
-        
-        top_controls_layout.addWidget(master_label)
-        top_controls_layout.addWidget(self.master_volume_slider)
-        top_controls_layout.addWidget(self.master_volume_display)
-        top_controls_layout.addWidget(crossfader_label)
-        top_controls_layout.addWidget(self.crossfader)
-        top_controls_layout.addWidget(self.crossfader_display)
         top_controls_layout.addStretch()
         
         # Decks layout - ULTRA COMPACT
@@ -514,74 +479,91 @@ class DJApp(QMainWindow):
         
 
         
-        # Volume controls layout - ULTRA COMPACT
-        volume_controls_layout = QHBoxLayout()
-        volume_controls_layout.setSpacing(5)  # Ultra minimal: reduced from 10 to 5
+        # Professional DJ Mixer Section - Center Console
+        mixer_section = QHBoxLayout()
+        mixer_section.setSpacing(20)
         
-        # Master volume layout
-        master_volume_layout = QVBoxLayout()
-        master_label = QLabel("Master Volume")
-        master_label.setProperty("class", "neonText")  # Add neon text effect
+        # Master Volume Control (Left side)
+        master_section = QVBoxLayout()
+        master_section.setSpacing(5)
+        master_label = QLabel("MASTER")
+        master_label.setProperty("class", "mixerLabel")
         master_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.master_volume_slider = QSlider(Qt.Orientation.Horizontal)
+        master_label.setStyleSheet("font-size: 14px; font-weight: bold; letter-spacing: 2px;")
+        
+        self.master_volume_slider = QSlider(Qt.Orientation.Vertical)
         self.master_volume_slider.setMinimum(0)
         self.master_volume_slider.setMaximum(100)
         self.master_volume_slider.setValue(100)
-        self.master_volume_slider.setFixedHeight(20)  # Ultra compact height
+        self.master_volume_slider.setFixedHeight(120)
+        self.master_volume_slider.setFixedWidth(40)
         self.master_volume_slider.setProperty("class", "masterVolumeSlider")
         
-        # Add volume percentage display
         self.master_volume_display = QLabel("100%")
         self.master_volume_display.setProperty("class", "volumeDisplay")
         self.master_volume_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.master_volume_display.setStyleSheet("font-size: 16px; font-weight: bold; padding: 5px;")
         
-        master_volume_layout.addWidget(master_label)
-        master_volume_layout.addWidget(self.master_volume_slider)
-        master_volume_layout.addWidget(self.master_volume_display)
+        master_section.addWidget(master_label)
+        master_section.addWidget(self.master_volume_slider, 0, Qt.AlignmentFlag.AlignCenter)
+        master_section.addWidget(self.master_volume_display)
         
-        # Crossfader layout
-        crossfader_layout = QVBoxLayout()
-        crossfader_label = QLabel("Crossfader")
-        crossfader_label.setProperty("class", "neonText")
-        crossfader_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Crossfader Section (Center - Main feature)
+        crossfader_section = QVBoxLayout()
+        crossfader_section.setSpacing(8)
+        
+        crossfader_title = QLabel("CROSSFADER")
+        crossfader_title.setProperty("class", "mixerLabel")
+        crossfader_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        crossfader_title.setStyleSheet("font-size: 14px; font-weight: bold; letter-spacing: 2px;")
+        
+        # Deck indicators above crossfader
+        deck_indicators_layout = QHBoxLayout()
+        self.deck1_indicator = QLabel("◄ DECK A")
+        self.deck1_indicator.setProperty("class", "deckIndicator")
+        self.deck1_indicator.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.deck1_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px;")
+        
+        self.deck2_indicator = QLabel("DECK B ►")
+        self.deck2_indicator.setProperty("class", "deckIndicator")
+        self.deck2_indicator.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.deck2_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px;")
+        
+        deck_indicators_layout.addWidget(self.deck1_indicator)
+        deck_indicators_layout.addStretch()
+        deck_indicators_layout.addWidget(self.deck2_indicator)
+        
+        # Crossfader slider
         self.crossfader = QSlider(Qt.Orientation.Horizontal)
         self.crossfader.setMinimum(0)
         self.crossfader.setMaximum(100)
         self.crossfader.setValue(50)
-        self.crossfader.setFixedHeight(25)  # Ultra compact height
+        self.crossfader.setFixedHeight(40)
+        self.crossfader.setMinimumWidth(300)
         self.crossfader.setProperty("class", "crossfaderSlider")
         
-        # Add crossfader position display
-        self.crossfader_display = QLabel("Center (50)")
-        self.crossfader_display.setProperty("class", "neonText")
+        # Position display below crossfader
+        self.crossfader_display = QLabel("CENTER")
+        self.crossfader_display.setProperty("class", "crossfaderDisplay")
         self.crossfader_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.crossfader_display.setStyleSheet("font-size: 16px; font-weight: bold; padding: 5px;")
         
-        # Add deck indicators
-        crossfader_indicator_layout = QHBoxLayout()
-        self.deck1_indicator = QLabel("DECK 1")
-        self.deck1_indicator.setProperty("class", "deckIndicator")
-        self.deck1_indicator.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        crossfader_section.addWidget(crossfader_title)
+        crossfader_section.addLayout(deck_indicators_layout)
+        crossfader_section.addWidget(self.crossfader)
+        crossfader_section.addWidget(self.crossfader_display)
         
-        self.deck2_indicator = QLabel("DECK 2")
-        self.deck2_indicator.setProperty("class", "deckIndicator")
-        self.deck2_indicator.setAlignment(Qt.AlignmentFlag.AlignRight)
-        
-        crossfader_indicator_layout.addWidget(self.deck1_indicator)
-        crossfader_indicator_layout.addWidget(self.deck2_indicator)
-        
-        crossfader_layout.addWidget(crossfader_label)
-        crossfader_layout.addLayout(crossfader_indicator_layout)
-        crossfader_layout.addWidget(self.crossfader)
-        crossfader_layout.addWidget(self.crossfader_display)
-        
-        # Add layouts to volume controls
-        volume_controls_layout.addLayout(master_volume_layout, 1)
-        volume_controls_layout.addLayout(crossfader_layout, 2)
+        # Assemble mixer section
+        mixer_section.addStretch()
+        mixer_section.addLayout(master_section)
+        mixer_section.addSpacing(30)
+        mixer_section.addLayout(crossfader_section)
+        mixer_section.addStretch()
         
         # Add all components to main layout
-        main_layout.addLayout(top_controls_layout)  # Now includes master & crossfader
+        main_layout.addLayout(top_controls_layout)
         main_layout.addLayout(decks_layout)
-        # volume_controls_layout removed - controls moved to top!
+        main_layout.addLayout(mixer_section)  # Professional mixer section below decks
         
         # Connect volume control signals
         # All volume changes trigger the main volume handler
@@ -1091,32 +1073,38 @@ class DJApp(QMainWindow):
              
     def _update_crossfader_display(self):
         """
-        Update the crossfader position display.
+        Update the crossfader position display with professional styling.
         """
         value = self.crossfader.value()
         
         # Create descriptive position text
         if value == 50:
-            position_text = "Center"
+            position_text = "CENTER"
             # Set both deck indicators to normal brightness
             self.deck1_indicator.setProperty("class", "deckIndicator")
             self.deck2_indicator.setProperty("class", "deckIndicator")
+            self.deck1_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px; color: #888;")
+            self.deck2_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px; color: #888;")
         elif value < 50:
-            # Calculate percentage bias toward Deck 1
+            # Calculate percentage bias toward Deck A
             bias_percent = int((50 - value) * 2)
-            position_text = f"Deck 1: {bias_percent}%"
+            position_text = f"◄ A {bias_percent}%"
             
-            # Highlight Deck 1, dim Deck 2
+            # Highlight Deck A, dim Deck B
             self.deck1_indicator.setProperty("class", "deckIndicatorActive")
             self.deck2_indicator.setProperty("class", "deckIndicatorDimmed")
+            self.deck1_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px; color: #f3cf2c;")
+            self.deck2_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px; color: #444;")
         else:
-            # Calculate percentage bias toward Deck 2
+            # Calculate percentage bias toward Deck B
             bias_percent = int((value - 50) * 2)
-            position_text = f"Deck 2: {bias_percent}%"
+            position_text = f"B {bias_percent}% ►"
             
-            # Highlight Deck 2, dim Deck 1
+            # Highlight Deck B, dim Deck A
             self.deck2_indicator.setProperty("class", "deckIndicatorActive")
             self.deck1_indicator.setProperty("class", "deckIndicatorDimmed")
+            self.deck2_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px; color: #f3cf2c;")
+            self.deck1_indicator.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px; color: #444;")
         
         # Update the styles
         self.deck1_indicator.style().unpolish(self.deck1_indicator)
@@ -1124,7 +1112,7 @@ class DJApp(QMainWindow):
         self.deck2_indicator.style().unpolish(self.deck2_indicator)
         self.deck2_indicator.style().polish(self.deck2_indicator)
             
-        self.crossfader_display.setText(f"{position_text}")
+        self.crossfader_display.setText(position_text)
 
     def _cleanup_all_temp_files(self):
         """
