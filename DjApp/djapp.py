@@ -48,16 +48,20 @@ from PyQt6.QtWidgets import (
     QCheckBox,QListWidget,QListWidgetItem
 )
 from PyQt6.QtCore import (
-    Qt, QTimer, QUrl
+    Qt, QTimer, QUrl, qInstallMessageHandler, QtMsgType
 )
 from PyQt6.QtGui import QPalette, QColor, QIcon
 from PyQt6.QtMultimedia import QMediaDevices
+
+# Suppress Qt CSS warnings for unsupported properties
+os.environ['QT_LOGGING_RULES'] = 'qt.qpa.stylesheet.warning=false'
+
 from file_management import FileBrowserDialog
 
 from audio_analyzer_bridge import AudioAnalyzerBridge
 from cache_manager import AudioCacheManager
 from deck_widgets import DeckWidget
-from tutorial import TutorialManager, ConceptsGuide
+from tutorial import TutorialManager, ConceptsGuide, HighlightOverlay
 from PyQt6.QtGui import QIntValidator
 from recording_worker import RealTimeRecordingWorker
 from automix_dialog import AutoMixDialog
@@ -400,85 +404,142 @@ class DJApp(QMainWindow):
         self.setCentralWidget(scroll_area)
         scroll_area.setWidget(central_widget)
         
-        # Create main layout - ULTRA COMPACT for perfect screen fit
+        # Main layout - Professional & Responsive
         main_layout = QVBoxLayout(central_widget)
-        main_layout.setSpacing(0)  # No spacing between sections
-        main_layout.setContentsMargins(2, 2, 2, 2)  # Minimal margins
+        main_layout.setSpacing(3)  # Professional spacing for clarity
+        main_layout.setContentsMargins(4, 4, 4, 4)  # Professional margins
         
-        # NO minimum size - let it fit naturally to screen
-        # central_widget.setMinimumSize removed to allow proper scaling
+        # Set responsive size policy for better scaling
+        central_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        central_widget.setMinimumSize(1000, 700)  # Minimum usable size
         
-        # Top controls layout
+        # Set window size constraints for responsive design
+        self.setMinimumSize(1000, 700)  # Minimum window size
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        
+        # Top controls layout - Professional & Responsive
         top_controls_layout = QHBoxLayout()
-        select_dir_button = QPushButton("Select Audio Directory")
+        top_controls_layout.setSpacing(8)  # Consistent spacing
+        top_controls_layout.setContentsMargins(4, 4, 4, 4)
+        
+        # === FILE MANAGEMENT SECTION ===
+        select_dir_button = QPushButton("📁 Select Directory")
         select_dir_button.setObjectName("select_dir_button")
         select_dir_button.clicked.connect(self.select_audio_directory)
-        self.track_list_button = QPushButton("Show Track List")
+        select_dir_button.setMinimumWidth(140)
+        select_dir_button.setMaximumWidth(180)
+        select_dir_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        select_dir_button.setMinimumHeight(32)
+        select_dir_button.setProperty("class", "neonBorder")
+        
+        self.track_list_button = QPushButton("🎵 Track List")
         self.track_list_button.clicked.connect(self.show_file_browser)
         self.track_list_button.setEnabled(False)
+        self.track_list_button.setMinimumWidth(110)
+        self.track_list_button.setMaximumWidth(140)
+        self.track_list_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.track_list_button.setMinimumHeight(32)
         
         top_controls_layout.addWidget(select_dir_button)
         top_controls_layout.addWidget(self.track_list_button)
         
-        # Record button (checkable)
-        self.record_button = QPushButton("Record")
+        # Separator
+        top_controls_layout.addSpacing(12)
+        
+        # === AUTOMIX SECTION ===
+        self.automix_button = QPushButton("🎚️ AutoMix")
+        self.automix_button.setProperty("class", "neonBorder")
+        self.automix_button.clicked.connect(self.auto_mix)
+        self.automix_button.setMinimumWidth(100)
+        self.automix_button.setMaximumWidth(130)
+        self.automix_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.automix_button.setMinimumHeight(32)
+        top_controls_layout.addWidget(self.automix_button)
+        
+        # Separator
+        top_controls_layout.addSpacing(12)
+        
+        # === RECORDING SECTION ===
+        self.record_button = QPushButton("⏺ Record")
         self.record_button.setCheckable(True)
         self.record_button.setProperty("class", "recordButton")
         self.record_button.clicked.connect(self.toggle_recording)
+        self.record_button.setMinimumWidth(90)
+        self.record_button.setMaximumWidth(120)
+        self.record_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.record_button.setMinimumHeight(32)
         
-        # Record folder button
-        record_folder_button = QPushButton("Set Recording Folder")
+        record_folder_button = QPushButton("📂 Rec Folder")
         record_folder_button.setProperty("class", "recordButton")
         record_folder_button.clicked.connect(self.select_recording_folder)
+        record_folder_button.setMinimumWidth(100)
+        record_folder_button.setMaximumWidth(130)
+        record_folder_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        record_folder_button.setMinimumHeight(32)
         
-        # Recording status label
         self.recording_status_label = QLabel("🔴 REC 00:00")
         self.recording_status_label.setProperty("class", "recordingStatusLabel")
-        self.recording_status_label.setVisible(False)  # Hidden until recording starts
+        self.recording_status_label.setVisible(False)
+        self.recording_status_label.setMinimumHeight(32)
         
-        # Add a button to show recordings history
-        self.view_recordings_button = QPushButton("View Recordings")
+        self.view_recordings_button = QPushButton("📼 View Recs")
         self.view_recordings_button.setProperty("class", "syncDefault")
         self.view_recordings_button.clicked.connect(self.show_recordings_list)
-        self.view_recordings_button.setEnabled(False)  # Enable only when recordings exist
+        self.view_recordings_button.setEnabled(False)
+        self.view_recordings_button.setMinimumWidth(120)
+        self.view_recordings_button.setMaximumWidth(150)
+        self.view_recordings_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.view_recordings_button.setMinimumHeight(32)
         
-        # Add AutoMix button to top controls
-        self.automix_button = QPushButton("AutoMix")
-        self.automix_button.setProperty("class", "neonBorder")
-        self.automix_button.clicked.connect(self.auto_mix)
-        top_controls_layout.addWidget(self.automix_button)
-        
-        # Add recording controls to top layout
         top_controls_layout.addWidget(self.record_button)
         top_controls_layout.addWidget(record_folder_button)
         top_controls_layout.addWidget(self.recording_status_label)
         top_controls_layout.addWidget(self.view_recordings_button)
-        top_controls_layout.addStretch()
         
-        # Add resolution and theme button next to help
-        settings_button = QPushButton("Settings")
+        # Flexible spacer
+        top_controls_layout.addStretch(1)
+        
+        # === UTILITY BUTTONS SECTION (Right side) ===
+        settings_button = QPushButton("⚙️ Settings")
         settings_button.setProperty("class", "helpButton")
         settings_button.clicked.connect(self.show_settings_dialog)
-        settings_button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        settings_button.setMinimumWidth(90)
+        settings_button.setMaximumWidth(120)
+        settings_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        settings_button.setMinimumHeight(32)
         
-        # Add help button
-        help_button = QPushButton("Help")
+        help_button = QPushButton("❓ Help")
         help_button.setProperty("class", "helpButton")
         help_button.clicked.connect(self.show_help)
-        help_button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        help_button.setMinimumWidth(80)
+        help_button.setMaximumWidth(110)
+        help_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        help_button.setMinimumHeight(32)
         
-        # Add settings and help buttons
+        new_features_button = QPushButton("🆕 New")
+        new_features_button.setProperty("class", "helpButton")
+        new_features_button.clicked.connect(self.show_new_features_tutorial)
+        new_features_button.setMinimumWidth(70)
+        new_features_button.setMaximumWidth(100)
+        new_features_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        new_features_button.setMinimumHeight(32)
+        
         top_controls_layout.addWidget(settings_button)
         top_controls_layout.addWidget(help_button)
+        top_controls_layout.addWidget(new_features_button)
         
-        top_controls_layout.addStretch()
-        
-        # Decks layout - ULTRA COMPACT
+        # Decks layout - Professional & Balanced
         decks_layout = QHBoxLayout()
-        decks_layout.setSpacing(2)  # Ultra minimal spacing
+        decks_layout.setSpacing(4)  # Professional spacing between decks
+        decks_layout.setContentsMargins(0, 2, 0, 2)
         
+        # Create deck widgets with responsive sizing
         self.deck1 = DeckWidget(1, main_app=self, audio_analyzer=self.audio_analyzer)
         self.deck2 = DeckWidget(2, main_app=self, audio_analyzer=self.audio_analyzer)
+        
+        # Set size policies for responsive layout
+        self.deck1.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.deck2.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         
         decks_layout.addWidget(self.deck1)
         decks_layout.addWidget(self.deck2)
@@ -491,85 +552,86 @@ class DJApp(QMainWindow):
         
 
         
-        # Professional DJ Mixer Section - EXTRA COMPACT (perfect screen fit)
+        # Professional DJ Mixer Section - MODERN & RESPONSIVE
         mixer_section = QHBoxLayout()
-        mixer_section.setSpacing(10)
-        mixer_section.setContentsMargins(5, 0, 5, 1)  # Minimal vertical margins
+        mixer_section.setSpacing(10)  # Reduced spacing
+        mixer_section.setContentsMargins(8, 1, 8, 1)  # Reduced vertical margins
         
-        # Master Volume Control (Left side) - EXTRA COMPACT
+        # Master Volume Control (Left side) - PROFESSIONAL SIZE
         master_section = QVBoxLayout()
-        master_section.setSpacing(1)
+        master_section.setSpacing(3)
         master_label = QLabel("MASTER")
         master_label.setProperty("class", "mixerLabel")
         master_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        master_label.setStyleSheet("font-size: 9px; font-weight: bold; letter-spacing: 1px;")
+        master_label.setStyleSheet("font-size: 11px; font-weight: bold; letter-spacing: 2px;")
         
         self.master_volume_slider = QSlider(Qt.Orientation.Vertical)
         self.master_volume_slider.setMinimum(0)
         self.master_volume_slider.setMaximum(100)
         self.master_volume_slider.setValue(100)
-        self.master_volume_slider.setFixedHeight(48)  # EXTREME: 55 → 48
-        self.master_volume_slider.setFixedWidth(28)   # EXTREME: 30 → 28
+        self.master_volume_slider.setFixedHeight(85)  # Increased height
+        self.master_volume_slider.setFixedWidth(32)   # Easier to grab
         self.master_volume_slider.setProperty("class", "masterVolumeSlider")
         
         self.master_volume_display = QLabel("100%")
         self.master_volume_display.setProperty("class", "volumeDisplay")
         self.master_volume_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.master_volume_display.setStyleSheet("font-size: 10px; font-weight: bold; padding: 1px 4px;")
+        self.master_volume_display.setStyleSheet("font-size: 11px; font-weight: bold; padding: 2px 6px;")
         
         master_section.addWidget(master_label)
         master_section.addWidget(self.master_volume_slider, 0, Qt.AlignmentFlag.AlignCenter)
         master_section.addWidget(self.master_volume_display)
         
-        # Crossfader Section (Center - Main feature) - EXTRA COMPACT
+        # Crossfader Section (Center - Main feature) - PROFESSIONAL SIZE
         crossfader_section = QVBoxLayout()
-        crossfader_section.setSpacing(1)
+        crossfader_section.setSpacing(2)
         
         crossfader_title = QLabel("CROSSFADER")
         crossfader_title.setProperty("class", "mixerLabel")
         crossfader_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        crossfader_title.setStyleSheet("font-size: 9px; font-weight: bold; letter-spacing: 1px;")
+        crossfader_title.setStyleSheet("font-size: 11px; font-weight: bold; letter-spacing: 2px;")
         
-        # Deck indicators above crossfader - EXTRA COMPACT
+        # Deck indicators above crossfader - CLEAR & VISIBLE
         deck_indicators_layout = QHBoxLayout()
-        self.deck1_indicator = QLabel("◄ A")
+        deck_indicators_layout.setSpacing(0)
+        self.deck1_indicator = QLabel("◄ DECK A")
         self.deck1_indicator.setProperty("class", "deckIndicator")
         self.deck1_indicator.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.deck1_indicator.setStyleSheet("font-size: 9px; font-weight: bold; padding: 1px;")
+        self.deck1_indicator.setStyleSheet("font-size: 10px; font-weight: bold; padding: 2px 4px;")
         
-        self.deck2_indicator = QLabel("B ►")
+        self.deck2_indicator = QLabel("DECK B ►")
         self.deck2_indicator.setProperty("class", "deckIndicator")
         self.deck2_indicator.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.deck2_indicator.setStyleSheet("font-size: 9px; font-weight: bold; padding: 1px;")
+        self.deck2_indicator.setStyleSheet("font-size: 10px; font-weight: bold; padding: 2px 4px;")
         
         deck_indicators_layout.addWidget(self.deck1_indicator)
         deck_indicators_layout.addStretch()
         deck_indicators_layout.addWidget(self.deck2_indicator)
         
-        # Crossfader slider - EXTRA COMPACT
+        # Crossfader slider - PROFESSIONAL SIZE
         self.crossfader = QSlider(Qt.Orientation.Horizontal)
         self.crossfader.setMinimum(0)
         self.crossfader.setMaximum(100)
         self.crossfader.setValue(50)
-        self.crossfader.setFixedHeight(22)  # EXTREME: 26 → 22
-        self.crossfader.setMinimumWidth(250)  # EXTREME: 260 → 250
+        self.crossfader.setFixedHeight(26)  # Professional height
+        self.crossfader.setMinimumWidth(300)  # Longer for better control
         self.crossfader.setProperty("class", "crossfaderSlider")
         
-        # Position display below crossfader - EXTRA COMPACT
+        # Position display below crossfader - CLEAR & READABLE
         self.crossfader_display = QLabel("CENTER")
         self.crossfader_display.setProperty("class", "crossfaderDisplay")
         self.crossfader_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.crossfader_display.setStyleSheet("font-size: 10px; font-weight: bold; padding: 1px 6px;")
+        self.crossfader_display.setStyleSheet("font-size: 11px; font-weight: bold; padding: 2px 8px;")
         
         crossfader_section.addWidget(crossfader_title)
         crossfader_section.addLayout(deck_indicators_layout)
         crossfader_section.addWidget(self.crossfader)
         crossfader_section.addWidget(self.crossfader_display)
         
-        # Assemble mixer section - EXTRA COMPACT
+        # Assemble mixer section - BALANCED LAYOUT
         mixer_section.addStretch()
         mixer_section.addLayout(master_section)
-        mixer_section.addSpacing(12)  # Further reduced from 20 to 12
+        mixer_section.addSpacing(20)
         mixer_section.addLayout(crossfader_section)
         mixer_section.addStretch()
         
@@ -700,6 +762,36 @@ class DJApp(QMainWindow):
         # Create and show the concepts guide
         guide = ConceptsGuide(self)
         guide.exec()
+    
+    def show_new_features_tutorial(self):
+        """
+        Show the new features tutorial highlighting professional DJ features.
+        """
+        try:
+            if hasattr(self, 'tutorial_manager'):
+                # Reset tutorial manager state
+                if self.tutorial_manager.is_running:
+                    self.tutorial_manager.stop_tutorial()
+                
+                # Setup tutorial steps with actual widget references
+                self.tutorial_manager.setup_tutorial_steps()
+                
+                # Create overlay for highlighting
+                self.tutorial_manager.overlay = HighlightOverlay(self)
+                self.tutorial_manager.overlay.setGeometry(self.geometry())
+                self.tutorial_manager.overlay.show()
+                
+                # Show the new features tutorial
+                self.tutorial_manager.start_new_features_tutorial()
+                print("✨ New Features Tutorial started!")
+            else:
+                QMessageBox.information(self, "Tutorial", 
+                    "Tutorial system not available. Showing help instead...")
+                self.show_help()
+        except Exception as e:
+            print(f"Error showing new features tutorial: {e}")
+            traceback.print_exc()
+            QMessageBox.warning(self, "Error", f"Could not load tutorial: {str(e)}")
 
     def select_audio_directory(self):
         """
@@ -2548,7 +2640,7 @@ Cache Statistics:
             
             if os.path.exists(qss_path):
                 print(f"Loading styles from: {qss_path}")
-                with open(qss_path, "r") as qss_file:
+                with open(qss_path, "r", encoding='utf-8') as qss_file:
                     stylesheet = qss_file.read()
                 
                 # Apply theme properties to all widgets
@@ -2831,6 +2923,24 @@ def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     app = QApplication(sys.argv)
+    
+    # Suppress Qt warnings for unsupported CSS properties
+    def qt_message_handler(mode, context, message):
+        # Filter out "Unknown property" warnings from QSS
+        if "Unknown property" in message:
+            return
+        # Allow all other messages through
+        if mode == QtMsgType.QtDebugMsg:
+            print(f"Qt Debug: {message}")
+        elif mode == QtMsgType.QtWarningMsg:
+            print(f"Qt Warning: {message}")
+        elif mode == QtMsgType.QtCriticalMsg:
+            print(f"Qt Critical: {message}")
+        elif mode == QtMsgType.QtFatalMsg:
+            print(f"Qt Fatal: {message}")
+    
+    # Install the message handler
+    qInstallMessageHandler(qt_message_handler)
     
     # Set application-wide style to Fusion and ensure it doesn't follow system theme
     app.setStyle("Fusion")

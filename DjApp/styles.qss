@@ -1,14 +1,15 @@
 /* 
 ╔═══════════════════════════════════════════════════════════════╗
-║           MixLab DJ - Modern 2025 UI Styles                   ║
-║   Glassmorphism • Neumorphism • Smooth Animations            ║
+║       MixLab DJ - Professional 2025 UI Styles                 ║
+║    Modern • Glassmorphism • Neumorphism • Pro DJ Look         ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 Color Palettes:
-- Yellow Theme: #f3cf2c (Neon Yellow)
-- Light Theme: #2c7bf3 (Electric Blue)
-- Purple Theme: #ff00ff (Neon Magenta)
-- Forest Theme: #00ff9f (Neon Green)
+- Accent: #f3cf2c (Neon Yellow) 
+- Primary Blue: #00d4ff (Cyan)
+- Secondary: #1a1a1a (Deep Black)
+- Highlight: #ff6600 (Orange)
+- Success: #00ff00 (Neon Green)
 */
 
 /* ═══════════════════ GLOBAL STYLES ═══════════════════ */
@@ -21,15 +22,15 @@ Color Palettes:
 QMainWindow {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:1, y2:1,
-        stop:0 #0f0f0f,
-        stop:0.5 #1a1a1a,
-        stop:1 #0f0f0f
+        stop:0 #0a0a0a,
+        stop:0.5 #141414,
+        stop:1 #0a0a0a
     );
 }
 
 QWidget {
     color: #ffffff;
-    selection-background-color: #f3cf2c;
+    selection-background-color: #00d4ff;
     selection-color: #000000;
 }
 
@@ -38,61 +39,61 @@ QWidget {
 QWidget#glassPanel {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(45, 45, 45, 0.85),
-        stop:1 rgba(30, 30, 30, 0.90)
+        stop:0 rgba(40, 40, 45, 0.9),
+        stop:1 rgba(20, 20, 25, 0.95)
     );
-    border: 1px solid rgba(243, 207, 44, 0.25);
-    border-radius: 20px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
     backdrop-filter: blur(10px);
 }
 
 QWidget#glassPanel:hover {
-    border: 1px solid rgba(243, 207, 44, 0.4);
+    border: 1px solid rgba(0, 212, 255, 0.35);
 }
 
 /* ═══════════════════ MODERN BUTTONS ═══════════════════ */
 
+/* Default Button Styles - Modern & Professional */
 QPushButton {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(60, 60, 60, 0.9),
-        stop:1 rgba(40, 40, 40, 0.9)
+        stop:0 rgba(55, 55, 60, 0.95),
+        stop:1 rgba(40, 40, 45, 0.95)
     );
-    color: #f3cf2c;
-    border: 2px solid rgba(243, 207, 44, 0.4);
-    border-radius: 14px;
+    color: #00d4ff;
+    border: 2px solid rgba(0, 212, 255, 0.35);
+    border-radius: 10px;
     padding: 8px 16px;
     font-size: 12px;
     font-weight: 700;
-    min-height: 20px;
-    transition: all 0.3s ease;
+    min-height: 24px;
 }
 
 QPushButton:hover {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(80, 80, 80, 0.95),
-        stop:1 rgba(55, 55, 55, 0.95)
+        stop:0 rgba(75, 75, 80, 0.98),
+        stop:1 rgba(55, 55, 60, 0.98)
     );
-    border: 2px solid rgba(243, 207, 44, 0.8);
+    border: 2px solid rgba(0, 212, 255, 0.7);
     color: #ffffff;
-    transform: translateY(-2px);
+    box-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
 }
 
 QPushButton:pressed {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(30, 30, 30, 0.95),
-        stop:1 rgba(20, 20, 20, 0.95)
+        stop:0 rgba(35, 35, 40, 0.98),
+        stop:1 rgba(25, 25, 30, 0.98)
     );
-    border: 2px solid #f3cf2c;
-    transform: translateY(1px);
+    border: 2px solid #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
 }
 
 QPushButton:disabled {
-    background: rgba(40, 40, 40, 0.5);
-    border: 2px solid rgba(243, 207, 44, 0.2);
-    color: rgba(243, 207, 44, 0.3);
+    background: rgba(35, 35, 40, 0.5);
+    border: 2px solid rgba(0, 212, 255, 0.15);
+    color: rgba(0, 212, 255, 0.3);
 }
 
 /* Accent Buttons (Play, Record, etc.) */
@@ -112,44 +113,122 @@ QPushButton#accentButton:hover {
     box-shadow: 0 0 20px rgba(243, 207, 44, 0.6);
 }
 
-/* Neon Border Buttons (Play, Loop, etc.) - Extra Prominent */
+/* Recording Buttons - Red theme for recording */
+QPushButton[class="recordButton"] {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(60, 50, 50, 0.95),
+        stop:1 rgba(45, 40, 40, 0.95)
+    );
+    color: #ff6666;
+    border: 2px solid rgba(255, 102, 102, 0.4);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    min-height: 28px;
+}
+
+QPushButton[class="recordButton"]:hover {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(80, 60, 60, 0.98),
+        stop:1 rgba(60, 50, 50, 0.98)
+    );
+    border: 2px solid rgba(255, 102, 102, 0.7);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(255, 102, 102, 0.5);
+}
+
+QPushButton[class="recordButton"]:checked {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(200, 50, 50, 0.95),
+        stop:1 rgba(150, 30, 30, 0.95)
+    );
+    border: 2px solid #ff3333;
+    color: #ffffff;
+    box-shadow: 0 0 25px rgba(255, 51, 51, 0.8);
+}
+
+/* Help/Settings Buttons - Subtle and clean */
+QPushButton[class="helpButton"] {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(50, 50, 55, 0.9),
+        stop:1 rgba(40, 40, 45, 0.9)
+    );
+    color: #aaaaaa;
+    border: 2px solid rgba(170, 170, 170, 0.3);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    min-height: 26px;
+}
+
+QPushButton[class="helpButton"]:hover {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(70, 70, 75, 0.95),
+        stop:1 rgba(55, 55, 60, 0.95)
+    );
+    border: 2px solid rgba(170, 170, 170, 0.6);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(170, 170, 170, 0.3);
+}
+
+/* Neon Border Buttons (Play, Loop, AutoMix, etc.) - Professional & Prominent */
 QPushButton[class="neonBorder"] {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(70, 70, 70, 0.95),
-        stop:1 rgba(50, 50, 50, 0.95)
+        stop:0 rgba(75, 75, 75, 0.95),
+        stop:1 rgba(55, 55, 55, 0.95)
     );
     color: #f3cf2c;
-    border: 3px solid rgba(243, 207, 44, 0.7);
-    border-radius: 16px;
-    padding: 10px 20px;
-    font-size: 14px;
+    border: 3px solid rgba(243, 207, 44, 0.65);
+    border-radius: 12px;
+    padding: 9px 18px;
+    font-size: 13px;
     font-weight: 800;
-    min-height: 24px;
-    min-width: 60px;
-    text-shadow: 0 0 8px rgba(243, 207, 44, 0.5);
+    min-height: 28px;
+    min-width: 70px;
+    text-shadow: 0 0 10px rgba(243, 207, 44, 0.6);
 }
 
 QPushButton[class="neonBorder"]:hover {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(90, 90, 90, 0.98),
-        stop:1 rgba(70, 70, 70, 0.98)
+        stop:0 rgba(95, 95, 95, 0.98),
+        stop:1 rgba(75, 75, 75, 0.98)
     );
-    border: 3px solid #f3cf2c;
+    border: 3px solid rgba(243, 207, 44, 0.95);
     color: #ffffff;
-    box-shadow: 0 0 25px rgba(243, 207, 44, 0.7);
-    text-shadow: 0 0 12px rgba(243, 207, 44, 0.8);
+    box-shadow: 0 0 28px rgba(243, 207, 44, 0.75);
+    text-shadow: 0 0 14px rgba(243, 207, 44, 0.9);
 }
 
 QPushButton[class="neonBorder"]:pressed {
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:0, y2:1,
-        stop:0 rgba(30, 30, 30, 0.98),
-        stop:1 rgba(20, 20, 20, 0.98)
+        stop:0 rgba(35, 35, 35, 0.98),
+        stop:1 rgba(25, 25, 25, 0.98)
     );
     border: 3px solid #f3cf2c;
+    box-shadow: 0 0 32px rgba(243, 207, 44, 0.95);
+    text-shadow: 0 0 16px rgba(243, 207, 44, 1.0);
+}
+
+QPushButton[class="neonBorder"]:checked {
+    background: qlineargradient(
+        spread:pad, x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(243, 207, 44, 0.3),
+        stop:1 rgba(243, 207, 44, 0.2)
+    );
+    border: 3px solid #f3cf2c;
+    color: #ffffff;
     box-shadow: 0 0 30px rgba(243, 207, 44, 0.9);
+    text-shadow: 0 0 15px rgba(243, 207, 44, 1.0);
 }
 
 /* SYNC Buttons - Big and Prominent */
@@ -441,62 +520,82 @@ QDial:hover {
 
 /* ═══════════════════ MODERN LABELS ═══════════════════ */
 
+/* Modern Label Styles */
 QLabel {
     color: #f3cf2c;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
 }
 
 QLabel#displayLabel {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     color: #f3cf2c;
     padding: 5px 10px;
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:1, y2:0,
-        stop:0 rgba(50, 50, 50, 0.95),
-        stop:1 rgba(40, 40, 40, 0.95)
+        stop:0 rgba(55, 55, 55, 0.95),
+        stop:1 rgba(45, 45, 45, 0.95)
     );
-    border: 2px solid rgba(243, 207, 44, 0.5);
+    border: 2px solid rgba(243, 207, 44, 0.55);
     border-radius: 10px;
-    text-shadow: 0 0 8px rgba(243, 207, 44, 0.4);
+    text-shadow: 0 0 10px rgba(243, 207, 44, 0.5);
 }
 
 QLabel#trackLabel {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     color: #ffffff;
     background: qlineargradient(
         spread:pad, x1:0, y1:0, x2:1, y2:0,
-        stop:0 rgba(45, 45, 45, 0.9),
-        stop:1 rgba(35, 35, 35, 0.9)
+        stop:0 rgba(50, 50, 50, 0.9),
+        stop:1 rgba(40, 40, 40, 0.9)
     );
-    padding: 2px 6px;
-    border-radius: 6px;
-    border: 1px solid rgba(243, 207, 44, 0.2);
+    padding: 3px 7px;
+    border-radius: 7px;
+    border: 2px solid rgba(243, 207, 44, 0.3);
+}
+
+/* Recording Status Label */
+QLabel[class="recordingStatusLabel"] {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff3333;
+    background: rgba(255, 51, 51, 0.15);
+    padding: 4px 10px;
+    border: 2px solid rgba(255, 51, 51, 0.5);
+    border-radius: 8px;
+    text-shadow: 0 0 8px rgba(255, 51, 51, 0.6);
 }
 
 /* ═══════════════════ LINE EDITS (TEXT INPUTS) ═══════════════════ */
 
+/* Modern Text Inputs */
 QLineEdit {
-    background: rgba(30, 30, 30, 0.9);
+    background: rgba(35, 35, 35, 0.9);
     color: #f3cf2c;
-    border: 2px solid rgba(243, 207, 44, 0.3);
-    border-radius: 10px;
+    border: 2px solid rgba(243, 207, 44, 0.35);
+    border-radius: 9px;
     padding: 6px 12px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    min-height: 20px;
+}
+
+QLineEdit:hover {
+    border: 2px solid rgba(243, 207, 44, 0.5);
+    background: rgba(40, 40, 40, 0.92);
 }
 
 QLineEdit:focus {
-    border: 2px solid rgba(243, 207, 44, 0.7);
-    background: rgba(40, 40, 40, 0.95);
-    box-shadow: 0 0 10px rgba(243, 207, 44, 0.2);
+    border: 2px solid rgba(243, 207, 44, 0.75);
+    background: rgba(45, 45, 45, 0.95);
+    box-shadow: 0 0 12px rgba(243, 207, 44, 0.3);
 }
 
 QLineEdit:disabled {
-    background: rgba(25, 25, 25, 0.7);
-    color: rgba(243, 207, 44, 0.4);
+    background: rgba(28, 28, 28, 0.7);
+    color: rgba(243, 207, 44, 0.35);
     border: 2px solid rgba(243, 207, 44, 0.15);
 }
 

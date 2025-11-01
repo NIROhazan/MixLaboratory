@@ -131,9 +131,18 @@ class TutorialManager(QObject):
         Returns:
             str: Path to the tutorial configuration file.
         """
-        # Store in the same directory as the application
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        return os.path.join(script_dir, "tutorial_config.json")
+        # Store in the cache directory or fall back to script directory
+        try:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            cache_dir = os.path.join(script_dir, "cache")
+            # Ensure cache directory exists
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir, exist_ok=True)
+            return os.path.join(cache_dir, "tutorial_config.json")
+        except Exception as e:
+            print(f"Error getting config path: {e}")
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            return os.path.join(script_dir, "tutorial_config.json")
         
     def _init_tutorial_steps(self):
         """
@@ -378,37 +387,120 @@ class TutorialManager(QObject):
         """
         Start the interactive tutorial.
         """
-        print("Tutorial start requested")
         if self.is_running:
-            print("Tutorial already running, ignoring start request")
             return
-            
-        print("Initializing tutorial...")
+        
+        self.is_running = True
+        self.current_step = 0
+        self._show_current_step()
+    
+    def start_new_features_tutorial(self):
+        """
+        Show a tutorial about the new professional features added recently.
+        Perfect for users who already know the basics!
+        """
         self.is_running = True
         self.current_step = 0
         
-        # Set up steps with actual widget references
-        print("Setting up tutorial steps...")
-        self.setup_tutorial_steps()
+        # Create new features tutorial steps
+        new_features_steps = [
+            TutorialStep(
+                "🆕 New Professional Features!",
+                "We've upgraded MixLab with professional DJ features:\n\n"
+                "✨ Advanced SYNC System\n"
+                "✨ Real-Time EQ\n"
+                "✨ Professional Beat Matching\n"
+                "✨ Harmonic Key Mixing\n"
+                "✨ Visual Beat Indicators\n\n"
+                "Let's explore these amazing new tools!",
+                None
+            ),
+            TutorialStep(
+                "🎛️ Professional SYNC System",
+                "The new SYNC button works like Pioneer CDJ equipment:\n\n"
+                "1️⃣ BPM Sync - Matches tempo instantly\n"
+                "2️⃣ Key Sync - Harmonic mixing with pitch adjustment\n"
+                "3️⃣ Beat Alignment - Perfect beat grid syncing\n"
+                "4️⃣ Continuous Monitoring - Auto-correction while playing\n\n"
+                "🔵 Button turns BLUE when synced = Professional look!",
+                self.main_app.deck1.sync_button if hasattr(self.main_app.deck1, "sync_button") else None,
+                "Click SYNC on Master deck first, then on Slave deck"
+            ),
+            TutorialStep(
+                "🎹 Harmonic Key Mixing",
+                "The upgraded sync includes Camelot Wheel integration:\n\n"
+                "• Compatible Keys - Automatically detected\n"
+                "• Key Display - Shows transpose amount (e.g., +5 semitones)\n"
+                "• Visual Feedback - Key display turns cyan when synced\n"
+                "• Real Pitch Adjustment - Using professional formulas\n\n"
+                "Mix in musically compatible keys for amazing sound!",
+                self.main_app.deck1.key_display_label if hasattr(self.main_app.deck1, "key_display_label") else None,
+                "Keys are harmonically matched during sync"
+            ),
+            TutorialStep(
+                "💡 Beat Indicator LED",
+                "New visual feedback for beat synchronization:\n\n"
+                "🟢 Green Flash - Normal playback, on beat\n"
+                "🔵 Blue Flash - Synced decks, perfect alignment\n"
+                "⚫ Dim - Between beats\n\n"
+                "Watch the LED next to SYNC button:\n"
+                "• Helps you see beat alignment visually\n"
+                "• Shows when tracks are locked together\n"
+                "• Professional DJ feedback system",
+                self.main_app.deck1.beat_indicator if hasattr(self.main_app.deck1, "beat_indicator") else None,
+                "Beat indicator shows synchronization status"
+            ),
+            TutorialStep(
+                "🎚️ Real-Time EQ",
+                "Enhanced EQ section with zero-delay response:\n\n"
+                "⚡ Instant Feedback - Changes apply immediately\n"
+                "🎛️ Three Bands - Bass, Mid, Treble control\n"
+                "📊 Visual Knobs - Larger, easier to use\n"
+                "🔊 Professional Sound - Industry-standard equalization\n\n"
+                "Adjust EQ while music is playing for instant mixing!",
+                self.main_app.deck1 if hasattr(self.main_app, "deck1") else None,
+                "EQ section for bass, mid, treble adjustments"
+            ),
+            TutorialStep(
+                "🎵 Advanced Beat Matching",
+                "Professional beat synchronization features:\n\n"
+                "✓ Quantization - Snaps to next bar for smooth mixing\n"
+                "✓ Phase Monitoring - Continuous beat drift correction\n"
+                "✓ Intelligent Dampening - Prevents correction loops\n"
+                "✓ 3-Second Cooldown - Lets tracks stabilize\n\n"
+                "Works like Traktor, Serato, and Pioneer gear!",
+                None
+            ),
+            TutorialStep(
+                "📍 Pro Tips for Sync",
+                "Best practices for professional mixing:\n\n"
+                "1. Load tracks on both decks first\n"
+                "2. Press SYNC on Master deck (becomes MASTER button)\n"
+                "3. Press SYNC on Slave deck (becomes SYNCED button)\n"
+                "4. Watch the beat indicators sync together\n"
+                "5. Adjust crossfader for smooth transitions\n"
+                "6. Key display shows harmonic compatibility\n\n"
+                "💡 Combine SYNC with crossfader for pro results!",
+                self.main_app.crossfader if hasattr(self.main_app, "crossfader") else None,
+                "Use SYNC + crossfader together"
+            ),
+            TutorialStep(
+                "🎉 You're Ready!",
+                "You now know all the professional features:\n\n"
+                "✅ Advanced SYNC system\n"
+                "✅ Harmonic key mixing\n"
+                "✅ Real-time beat matching\n"
+                "✅ Visual feedback indicators\n"
+                "✅ Professional EQ control\n\n"
+                "Go create amazing mixes! 🎧",
+                None
+            ),
+        ]
         
-        # Create overlay for highlighting
-        print("Creating tutorial overlay...")
-        self.overlay = HighlightOverlay(self.main_app)
-        self.overlay.setGeometry(self.main_app.geometry())
-        
-        try:
-            print("Showing overlay...")
-            self.overlay.show()
-            
-            # Show the first step
-            print("Showing first tutorial step...")
-            self._show_current_step()
-            print("Tutorial started successfully")
-        except Exception as e:
-            print(f"Error during tutorial start: {e}")
-            traceback.print_exc()
-            self.stop_tutorial()
-        
+        # Temporarily replace steps
+        self.tutorial_steps = new_features_steps
+        self._show_current_step()
+    
     def stop_tutorial(self):
         """
         Stop the tutorial and clean up overlay/dialog.

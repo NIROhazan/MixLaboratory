@@ -357,28 +357,31 @@ class DeckWidget(GlassWidget):
         """
         Set up the user interface for the deck, including controls, waveform, spectrogram, EQ, and loop controls.
         """
+        # Main deck layout - Professional spacing for better organization
         layout = QVBoxLayout(self)
-        layout.setSpacing(0)  # ABSOLUTE ZERO spacing
-        layout.setContentsMargins(1, 1, 1, 1)  # EXTREME minimal margins
+        layout.setSpacing(2)  # Minimal but visible spacing
+        layout.setContentsMargins(2, 2, 2, 2)  # Professional margins
         
+        # Track Label - Professional and prominent
         self.track_label = QLabel("No track loaded")
         self.track_label.setObjectName("displayLabel")
         self.track_label.setWordWrap(False)  # Single line for better visibility
-        self.track_label.setMinimumHeight(22)  # Optimized height
-        self.track_label.setMaximumHeight(22)
+        self.track_label.setMinimumHeight(26)  # Professional height
+        self.track_label.setMaximumHeight(28)
+        self.track_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.track_label.setStyleSheet("""
             font-size: 12px; 
             font-weight: bold; 
-            padding: 3px 6px;
+            padding: 4px 8px;
             color: #f3cf2c;
             background: qlineargradient(
                 spread:pad, x1:0, y1:0, x2:1, y2:0,
                 stop:0 rgba(50, 50, 50, 0.95),
                 stop:1 rgba(40, 40, 40, 0.95)
             );
-            border: 2px solid rgba(243, 207, 44, 0.4);
-            border-radius: 6px;
-        """)  # Optimized for space
+            border: 2px solid rgba(243, 207, 44, 0.5);
+            border-radius: 7px;
+        """)
         
         self.waveform = WaveformDisplay()
         self.waveform.set_audio_analyzer_with_cache(self.audio_analyzer)
@@ -388,55 +391,88 @@ class DeckWidget(GlassWidget):
         self.spectrogram.set_fft_analyzer(self.audio_analyzer)
         self.spectrogram.setProperty("class", "spectrogramDisplay")
         
-        # Create a container widget for visualizations - ULTRA COMPACT
+        # Visualization container - Professional & Visible
         viz_container = QWidget()
         viz_layout = QVBoxLayout(viz_container)
-        viz_layout.setContentsMargins(0, 0, 0, 0)  # No margins
-        viz_layout.setSpacing(0)  # Zero spacing
+        viz_layout.setContentsMargins(0, 0, 0, 0)
+        viz_layout.setSpacing(1)  # Minimal spacing
         
-        # Set maximum heights - OPTIMIZED for space efficiency
-        self.waveform.setMaximumHeight(28)  # Reduced to make room for bigger EQ knobs
-        self.spectrogram.setMaximumHeight(18)  # Reduced to make room for bigger EQ knobs
+        # Set heights - Professional visibility while fitting on screen
+        self.waveform.setMinimumHeight(70)  # Increased to fill black area
+        self.waveform.setMaximumHeight(90)
+        self.spectrogram.setMinimumHeight(45)  # Increased to fill black area
+        self.spectrogram.setMaximumHeight(55)
         
         viz_layout.addWidget(self.waveform)
         viz_layout.addWidget(self.spectrogram)
         
+        # Controls panel - Professional spacing
         controls_panel = QWidget()
         controls_panel.setObjectName("glassPanel")
         controls_layout = QHBoxLayout(controls_panel)
-        controls_layout.setSpacing(4)  # EXTREME: 10 → 4
-        controls_layout.setContentsMargins(2, 2, 2, 2)  # Minimal margins
+        controls_layout.setSpacing(6)  # Professional spacing
+        controls_layout.setContentsMargins(4, 4, 4, 4)  # Professional margins
         
-        self.play_btn = QPushButton("Play")
+        # Play Button - Large and prominent for main control
+        self.play_btn = QPushButton("▶ Play")
         self.play_btn.clicked.connect(self.toggle_playback)
         self.play_btn.setProperty("class", "neonBorder")
+        self.play_btn.setMinimumSize(80, 50)  # Prominent size for primary control
+        self.play_btn.setMaximumSize(100, 60)
+        self.play_btn.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
+        # Volume Panel with dynamic display
+        volume_panel = QWidget()
+        volume_layout = QVBoxLayout(volume_panel)
+        volume_layout.setContentsMargins(0, 0, 0, 0)
+        volume_layout.setSpacing(2)
+        
+        # Volume label
+        volume_label = QLabel("VOL")
+        volume_label.setProperty("class", "neonText")
+        volume_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        volume_label.setStyleSheet("font-size: 10px; font-weight: bold;")
+        volume_label.setMinimumWidth(42)  # Wide enough for display
+        
+        # Volume Slider - Professional height
         self.volume_slider = QSlider(Qt.Orientation.Vertical)
         self.volume_slider.setMinimum(0)
         self.volume_slider.setMaximum(100)
         self.volume_slider.setValue(100)
-        self.volume_slider.setMinimumHeight(60)  # Make it taller and more prominent
-        self.volume_slider.setMaximumHeight(80)  # Allow some flexibility
+        self.volume_slider.setMinimumHeight(70)  # Professional height
+        self.volume_slider.setMaximumHeight(90)
         self.volume_slider.setProperty("class", "volumeSliderNormal")
         self.volume_slider.valueChanged.connect(self.handle_volume_change)
         
-        # Tempo Slider (Pitch Fader) - DJ style
+        # Volume display label with dynamic color
+        self.volume_display = QLabel("100%")
+        self.volume_display.setProperty("class", "neonText")
+        self.volume_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.volume_display.setMinimumWidth(42)  # Wide enough for "100%"
+        self.volume_display.setMinimumHeight(18)  # Ensure text isn't cut off
+        self.volume_display.setStyleSheet("font-size: 10px; font-weight: bold; color: #f3cf2c;")
+        
+        volume_layout.addWidget(volume_label)
+        volume_layout.addWidget(self.volume_slider)
+        volume_layout.addWidget(self.volume_display)
+        
+        # Tempo Slider (Pitch Fader) - DJ style, Professional size
         tempo_slider_panel = QWidget()
         tempo_slider_layout = QVBoxLayout(tempo_slider_panel)
         tempo_slider_layout.setContentsMargins(0, 0, 0, 0)
-        tempo_slider_layout.setSpacing(0)
+        tempo_slider_layout.setSpacing(2)
         
         tempo_slider_label = QLabel("TEMPO")
         tempo_slider_label.setProperty("class", "neonText")
         tempo_slider_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        tempo_slider_label.setStyleSheet("font-size: 9px; font-weight: bold;")
+        tempo_slider_label.setStyleSheet("font-size: 10px; font-weight: bold;")
         
         self.tempo_slider = QSlider(Qt.Orientation.Vertical)
         self.tempo_slider.setMinimum(-16)  # -16% (like vinyl pitch control)
         self.tempo_slider.setMaximum(16)   # +16%
         self.tempo_slider.setValue(0)      # Center = original BPM
-        self.tempo_slider.setMinimumHeight(60)  # Make it taller and more prominent
-        self.tempo_slider.setMaximumHeight(80)  # Allow some flexibility
+        self.tempo_slider.setMinimumHeight(70)  # Professional height
+        self.tempo_slider.setMaximumHeight(90)
         self.tempo_slider.setTickPosition(QSlider.TickPosition.TicksBothSides)
         self.tempo_slider.setTickInterval(4)
         self.tempo_slider.setProperty("class", "tempoSlider")
@@ -445,37 +481,57 @@ class DeckWidget(GlassWidget):
         self.tempo_percent_label = QLabel("0%")
         self.tempo_percent_label.setProperty("class", "neonText")
         self.tempo_percent_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.tempo_percent_label.setStyleSheet("font-size: 9px; font-weight: bold;")
+        self.tempo_percent_label.setStyleSheet("font-size: 10px; font-weight: bold;")
         
         tempo_slider_layout.addWidget(tempo_slider_label)
         tempo_slider_layout.addWidget(self.tempo_slider)
         tempo_slider_layout.addWidget(self.tempo_percent_label)
         
+        # BPM/Tempo Panel - Professional & organized
         tempo_panel = QWidget()
         tempo_panel.setObjectName("glassPanel")
+        tempo_panel.setMinimumWidth(230)  # Increased width to fit all buttons
         tempo_layout = QVBoxLayout(tempo_panel)
+        tempo_layout.setSpacing(4)
+        tempo_layout.setContentsMargins(6, 4, 6, 4)  # Balanced margins
         
+        # BPM Display with clear label
         bpm_display_layout = QHBoxLayout()
+        bpm_display_layout.setSpacing(4)
         tempo_label = QLabel("BPM:")
+        tempo_label.setProperty("class", "neonText")
+        tempo_label.setStyleSheet("font-size: 11px; font-weight: bold;")
         self.tempo_text = QLineEdit()
-        self.tempo_text.setPlaceholderText("Enter BPM")
+        self.tempo_text.setPlaceholderText("Auto")
         self.tempo_text.setValidator(QIntValidator(0, 1000))
         self.tempo_text.returnPressed.connect(self.handle_bpm_input)
+        self.tempo_text.setMinimumWidth(70)  # Increased width
+        self.tempo_text.setMaximumWidth(90)
+        self.tempo_text.setMinimumHeight(24)
         
         bpm_display_layout.addWidget(tempo_label)
         bpm_display_layout.addWidget(self.tempo_text)
         
+        # BPM Controls - Appropriately sized buttons
         bpm_controls_layout = QHBoxLayout()
-        tempo_down_btn = QPushButton("-")
+        bpm_controls_layout.setSpacing(4)
+        tempo_down_btn = QPushButton("−")
         tempo_down_btn.setObjectName("bpm_minus")
         tempo_down_btn.clicked.connect(lambda: self.adjust_tempo(-1))
+        tempo_down_btn.setFixedSize(40, 40)
+        tempo_down_btn.setToolTip("Decrease BPM by 1")
         
         tempo_up_btn = QPushButton("+")
         tempo_up_btn.setObjectName("bpm_plus")
         tempo_up_btn.clicked.connect(lambda: self.adjust_tempo(1))
+        tempo_up_btn.setFixedSize(40, 40)
+        tempo_up_btn.setToolTip("Increase BPM by 1")
         
-        tempo_reset_btn = QPushButton("Reset BPM")
+        tempo_reset_btn = QPushButton("↻ Reset")
         tempo_reset_btn.clicked.connect(self.reset_tempo)
+        tempo_reset_btn.setMinimumSize(65, 18)  # Reduced height by 0.35cm
+        tempo_reset_btn.setMaximumSize(85, 22)
+        tempo_reset_btn.setToolTip("Reset to original BPM")
         
         bpm_controls_layout.addWidget(tempo_down_btn)
         bpm_controls_layout.addWidget(tempo_up_btn)
@@ -484,30 +540,40 @@ class DeckWidget(GlassWidget):
         tempo_layout.addLayout(bpm_display_layout)
         tempo_layout.addLayout(bpm_controls_layout)
         
-        # Add key display and transpose controls
+        # Key Display & Transpose Controls - Clear and organized
         key_display_layout = QHBoxLayout()
+        key_display_layout.setSpacing(4)
         key_label = QLabel("Key:")
         key_label.setProperty("class", "neonText")
+        key_label.setStyleSheet("font-size: 11px; font-weight: bold;")
+        key_label.setMinimumWidth(40)  # Increased width
         self.key_display_label = QLabel("---")
         self.key_display_label.setProperty("class", "neonText")
-        self.key_display_label.setMinimumWidth(80)
+        self.key_display_label.setMinimumWidth(90)  # Increased width
+        self.key_display_label.setStyleSheet("font-size: 11px; font-weight: bold;")
         key_display_layout.addWidget(key_label)
         key_display_layout.addWidget(self.key_display_label)
         
+        # Key Transpose Controls - Appropriately sized
         key_transpose_layout = QHBoxLayout()
-        key_down_btn = QPushButton("♭")  # Flat symbol
+        key_transpose_layout.setSpacing(4)
+        key_down_btn = QPushButton("♭")
         key_down_btn.setObjectName("key_down")
         key_down_btn.setToolTip("Transpose down 1 semitone")
         key_down_btn.clicked.connect(lambda: self.transpose_key(-1))
+        key_down_btn.setFixedSize(40, 40)
         
-        key_up_btn = QPushButton("♯")  # Sharp symbol
+        key_up_btn = QPushButton("♯")
         key_up_btn.setObjectName("key_up")
         key_up_btn.setToolTip("Transpose up 1 semitone")
         key_up_btn.clicked.connect(lambda: self.transpose_key(1))
+        key_up_btn.setFixedSize(40, 40)
         
-        key_reset_btn = QPushButton("Reset Key")
+        key_reset_btn = QPushButton("↻ Key")
         key_reset_btn.clicked.connect(self.reset_key)
         key_reset_btn.setToolTip("Reset to original key")
+        key_reset_btn.setMinimumSize(55, 32)  # Reduced height by 0.35cm
+        key_reset_btn.setMaximumSize(75, 36)
         
         key_transpose_layout.addWidget(key_down_btn)
         key_transpose_layout.addWidget(key_up_btn)
@@ -516,38 +582,46 @@ class DeckWidget(GlassWidget):
         tempo_layout.addLayout(key_display_layout)
         tempo_layout.addLayout(key_transpose_layout)
         
-        # Add tempo layout to the main layout
-        layout.addLayout(tempo_layout)
+        # tempo_panel will be added to controls_layout later (line 553)
         
-        # Beat indicator LED - flashes on beats when synced
+        # Beat indicator LED - Professional size and visibility
         self.beat_indicator = QLabel("●")
         self.beat_indicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.beat_indicator.setFixedSize(20, 20)
+        self.beat_indicator.setFixedSize(24, 24)  # Slightly larger for better visibility
         self.beat_indicator.setStyleSheet(
-            "color: #333333; font-size: 16px; font-weight: bold; "
-            "background: rgba(50, 50, 50, 0.5); border-radius: 10px;"
+            "color: #333333; font-size: 18px; font-weight: bold; "
+            "background: rgba(50, 50, 50, 0.5); border-radius: 12px;"
         )
         self.beat_indicator.setToolTip("Beat Indicator - Flashes on beats when synced")
         
+        # Sync Button - Professional size for important feature
         self.sync_button = QPushButton("SYNC")
         self.sync_button.setProperty("class", "syncDefault")
+        self.sync_button.setMinimumSize(90, 36)  # Prominent for important control
+        self.sync_button.setMaximumSize(120, 42)
+        self.sync_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
+        # Progress/Timeline Slider - Professional height for easy scrubbing
         self.progress = QSlider(Qt.Orientation.Horizontal)
         self.progress.setMinimum(0)
         self.progress.setMaximum(1000)
-        self.progress.setFixedHeight(20)  # Make timeline more prominent
+        self.progress.setMinimumHeight(24)  # Easier to grab and scrub
+        self.progress.setMaximumHeight(28)
         self.progress.setProperty("class", "progressSlider")
         self.progress.sliderMoved.connect(self.seek)
         self.progress.sliderPressed.connect(lambda: self.player.pause())
         self.progress.sliderReleased.connect(lambda: self.player.play() if self.is_playing else None)
 
+        # Time labels - Clear and readable
         self.current_time = QLabel("0:00")
         self.total_time = QLabel("0:00")
         self.current_time.setProperty("class", "neonText")
         self.total_time.setProperty("class", "neonText")
+        self.current_time.setStyleSheet("font-size: 11px; font-weight: bold;")
+        self.total_time.setStyleSheet("font-size: 11px; font-weight: bold;")
         
         controls_layout.addWidget(self.play_btn)
-        controls_layout.addWidget(self.volume_slider)
+        controls_layout.addWidget(volume_panel)
         controls_layout.addWidget(tempo_slider_panel)
         controls_layout.addWidget(tempo_panel)
         
@@ -556,62 +630,88 @@ class DeckWidget(GlassWidget):
         self.time_layout.addStretch()
         self.time_layout.addWidget(self.total_time)
         
+        # EQ Panel - Professional size for DJ controls
         eq_panel = QWidget()
         eq_panel.setObjectName("glassPanel")
         eq_layout = QHBoxLayout(eq_panel)
-        eq_layout.setSpacing(8)  # Better spacing for bigger knobs
-        eq_layout.setContentsMargins(4, 4, 4, 4)  # Slightly more padding for bigger knobs
+        eq_layout.setSpacing(10)  # Professional spacing
+        eq_layout.setContentsMargins(6, 5, 6, 5)
         
         eq_label = QLabel("EQ:")
         eq_label.setProperty("class", "neonText")
-        eq_label.setStyleSheet("font-size: 11px; font-weight: bold;")
+        eq_label.setStyleSheet("font-size: 12px; font-weight: bold;")
         eq_layout.addWidget(eq_label)
         
+        # Bass Knob - Professional size
         bass_layout = QVBoxLayout()
-        bass_layout.setSpacing(2)
+        bass_layout.setSpacing(3)
         self.bass_knob = QDial()
-        self.bass_knob.setMinimum(0); self.bass_knob.setMaximum(200); self.bass_knob.setValue(100)
-        self.bass_knob.setWrapping(False); self.bass_knob.setNotchesVisible(True)
+        self.bass_knob.setMinimum(0)
+        self.bass_knob.setMaximum(200)
+        self.bass_knob.setValue(100)
+        self.bass_knob.setWrapping(False)
+        self.bass_knob.setNotchesVisible(True)
         self.bass_knob.valueChanged.connect(self._on_eq_changed)
-        self.bass_knob.setFixedSize(55, 55)  # MUCH BIGGER for better control
-        bass_label = QLabel("Bass"); bass_label.setAlignment(Qt.AlignmentFlag.AlignCenter); bass_label.setProperty("class", "neonText")
+        self.bass_knob.setFixedSize(60, 60)  # Professional size for precise control
+        bass_label = QLabel("Bass")
+        bass_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        bass_label.setProperty("class", "neonText")
         bass_label.setStyleSheet("font-size: 10px; font-weight: bold;")
-        bass_layout.addWidget(self.bass_knob, 0, Qt.AlignmentFlag.AlignCenter); bass_layout.addWidget(bass_label)
+        bass_layout.addWidget(self.bass_knob, 0, Qt.AlignmentFlag.AlignCenter)
+        bass_layout.addWidget(bass_label)
         eq_layout.addLayout(bass_layout)
         
+        # Mid Knob - Professional size
         mid_layout = QVBoxLayout()
-        mid_layout.setSpacing(2)
+        mid_layout.setSpacing(3)
         self.mid_knob = QDial()
-        self.mid_knob.setMinimum(0); self.mid_knob.setMaximum(200); self.mid_knob.setValue(100)
-        self.mid_knob.setWrapping(False); self.mid_knob.setNotchesVisible(True)
+        self.mid_knob.setMinimum(0)
+        self.mid_knob.setMaximum(200)
+        self.mid_knob.setValue(100)
+        self.mid_knob.setWrapping(False)
+        self.mid_knob.setNotchesVisible(True)
         self.mid_knob.valueChanged.connect(self._on_eq_changed)
-        self.mid_knob.setFixedSize(55, 55)  # MUCH BIGGER for better control
-        mid_label = QLabel("Mid"); mid_label.setAlignment(Qt.AlignmentFlag.AlignCenter); mid_label.setProperty("class", "neonText")
+        self.mid_knob.setFixedSize(60, 60)
+        mid_label = QLabel("Mid")
+        mid_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        mid_label.setProperty("class", "neonText")
         mid_label.setStyleSheet("font-size: 10px; font-weight: bold;")
-        mid_layout.addWidget(self.mid_knob, 0, Qt.AlignmentFlag.AlignCenter); mid_layout.addWidget(mid_label)
+        mid_layout.addWidget(self.mid_knob, 0, Qt.AlignmentFlag.AlignCenter)
+        mid_layout.addWidget(mid_label)
         eq_layout.addLayout(mid_layout)
         
+        # Treble Knob - Professional size
         treble_layout = QVBoxLayout()
-        treble_layout.setSpacing(2)
+        treble_layout.setSpacing(3)
         self.treble_knob = QDial()
-        self.treble_knob.setMinimum(0); self.treble_knob.setMaximum(200); self.treble_knob.setValue(100)
-        self.treble_knob.setWrapping(False); self.treble_knob.setNotchesVisible(True)
+        self.treble_knob.setMinimum(0)
+        self.treble_knob.setMaximum(200)
+        self.treble_knob.setValue(100)
+        self.treble_knob.setWrapping(False)
+        self.treble_knob.setNotchesVisible(True)
         self.treble_knob.valueChanged.connect(self._on_eq_changed)
-        self.treble_knob.setFixedSize(55, 55)  # MUCH BIGGER for better control
-        treble_label = QLabel("Treble"); treble_label.setAlignment(Qt.AlignmentFlag.AlignCenter); treble_label.setProperty("class", "neonText")
+        self.treble_knob.setFixedSize(60, 60)
+        treble_label = QLabel("Treble")
+        treble_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        treble_label.setProperty("class", "neonText")
         treble_label.setStyleSheet("font-size: 10px; font-weight: bold;")
-        treble_layout.addWidget(self.treble_knob, 0, Qt.AlignmentFlag.AlignCenter); treble_layout.addWidget(treble_label)
+        treble_layout.addWidget(self.treble_knob, 0, Qt.AlignmentFlag.AlignCenter)
+        treble_layout.addWidget(treble_label)
         eq_layout.addLayout(treble_layout)
         
-        reset_eq_btn = QPushButton("Reset EQ")
+        # Reset EQ Button - Appropriate size
+        reset_eq_btn = QPushButton("↻ Reset EQ")
         reset_eq_btn.clicked.connect(self._reset_eq)
+        reset_eq_btn.setMinimumSize(75, 30)
+        reset_eq_btn.setMaximumSize(95, 35)
+        reset_eq_btn.setToolTip("Reset all EQ bands to neutral")
         eq_layout.addWidget(reset_eq_btn)
         
-        # Add EQ status label
+        # EQ status label
         self.eq_status_label = QLabel("")
         self.eq_status_label.setProperty("class", "neonText")
         self.eq_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.eq_status_label.setVisible(False)  # Hidden by default
+        self.eq_status_label.setVisible(False)
         eq_layout.addWidget(self.eq_status_label)
         
         # Track label at the TOP so it's always visible
@@ -622,77 +722,79 @@ class DeckWidget(GlassWidget):
         layout.addWidget(self.progress)
         layout.addLayout(self.time_layout)
         
-        # Add loop controls panel - COMPACT
+        # Loop Controls Panel - Professional & Clear
         loop_panel = QWidget()
         loop_panel.setObjectName("glassPanel")
-        loop_layout = QHBoxLayout(loop_panel)
-        loop_layout.setSpacing(6)  # Reduced spacing
-        loop_layout.setContentsMargins(4, 2, 4, 2)  # Tight margins
+        loop_panel.setMinimumWidth(190)  # Ensure panel is wide enough for START button and inputs
+        loop_panel_main = QVBoxLayout(loop_panel)
+        loop_panel_main.setSpacing(3)
+        loop_panel_main.setContentsMargins(6, 4, 6, 4)
         
-        loop_label = QLabel("LOOP")
-        loop_label.setProperty("class", "neonText")
-        loop_label.setStyleSheet("font-size: 9px; padding: 0px; font-weight: bold;")
-        loop_layout.addWidget(loop_label, 0, Qt.AlignmentFlag.AlignCenter)
+        # Header label - Clear and prominent
+        loop_header = QLabel("LOOP")
+        loop_header.setProperty("class", "neonText")
+        loop_header.setStyleSheet("font-size: 11px; font-weight: bold; color: #00d4ff; padding: 2px 4px;")
+        loop_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        loop_header.setMinimumWidth(70)  # Ensure text isn't cut off
+        loop_panel_main.addWidget(loop_header)
         
-        # Loop start input - COMPACT
-        start_layout = QVBoxLayout()
-        start_layout.setSpacing(2)
-        start_layout.setContentsMargins(0, 0, 0, 0)
-        start_label = QLabel("Start")
-        start_label.setProperty("class", "neonText")
-        start_label.setStyleSheet("font-size: 8px;")
-        start_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.loop_start_input = QLineEdit("0.0")
-        self.loop_start_input.setFixedWidth(55)
-        self.loop_start_input.setFixedHeight(22)
-        self.loop_start_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.loop_start_input.returnPressed.connect(self._update_loop_start)
-        start_layout.addWidget(start_label)
-        start_layout.addWidget(self.loop_start_input)
-        loop_layout.addLayout(start_layout)
+        # Controls layout
+        loop_layout = QHBoxLayout()
+        loop_layout.setSpacing(6)
+        loop_layout.setContentsMargins(0, 0, 0, 0)
         
-        # Loop length input - COMPACT
-        length_layout = QVBoxLayout()
-        length_layout.setSpacing(2)
-        length_layout.setContentsMargins(0, 0, 0, 0)
-        length_label = QLabel("Length")
-        length_label.setProperty("class", "neonText")
-        length_label.setStyleSheet("font-size: 8px;")
-        length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.loop_length_input = QLineEdit("4.0")
-        self.loop_length_input.setFixedWidth(55)
-        self.loop_length_input.setFixedHeight(22)
-        self.loop_length_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.loop_length_input.returnPressed.connect(self._update_loop_length)
-        length_layout.addWidget(length_label)
-        length_layout.addWidget(self.loop_length_input)
-        loop_layout.addLayout(length_layout)
-        
-        # Loop toggle button - COMPACT
-        self.loop_button = QPushButton("LOOP")
+        # Loop button - Professional size with START text
+        self.loop_button = QPushButton("START")
         self.loop_button.setCheckable(True)
         self.loop_button.setProperty("class", "neonBorder")
-        self.loop_button.setFixedHeight(48)  # Match the total height of label + input
+        self.loop_button.setMinimumSize(55, 46)  # Increased height by 0.5cm (~14px)
+        self.loop_button.setMaximumSize(70, 50)
+        self.loop_button.setToolTip("Enable/Disable Loop")
+        self.loop_button.setStyleSheet("font-size: 10px; font-weight: bold;")  # Adjusted font size
         self.loop_button.clicked.connect(self.toggle_loop)
-        loop_layout.addWidget(self.loop_button, 0, Qt.AlignmentFlag.AlignCenter)
+        loop_layout.addWidget(self.loop_button)
         
-        # Create horizontal layout for loop panel and turntable side by side
-        loop_turntable_row = QHBoxLayout()
-        loop_turntable_row.setSpacing(10)
-        loop_turntable_row.setContentsMargins(0, 0, 0, 0)
+        # Loop start input - Clear and readable
+        self.loop_start_input = QLineEdit("0.0")
+        self.loop_start_input.setMinimumWidth(50)
+        self.loop_start_input.setMaximumWidth(65)
+        self.loop_start_input.setMinimumHeight(28)
+        self.loop_start_input.setMaximumHeight(32)
+        self.loop_start_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.loop_start_input.setStyleSheet("font-size: 10px; padding: 2px; font-weight: bold;")
+        self.loop_start_input.setToolTip("Loop Start (seconds)")
+        self.loop_start_input.returnPressed.connect(self._update_loop_start)
+        loop_layout.addWidget(self.loop_start_input)
         
-        # Add loop panel on the left
-        loop_turntable_row.addWidget(loop_panel)
+        # Loop length input - Clear and readable
+        self.loop_length_input = QLineEdit("4.0")
+        self.loop_length_input.setMinimumWidth(50)
+        self.loop_length_input.setMaximumWidth(65)
+        self.loop_length_input.setMinimumHeight(28)
+        self.loop_length_input.setMaximumHeight(32)
+        self.loop_length_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.loop_length_input.setStyleSheet("font-size: 10px; padding: 2px; font-weight: bold;")
+        self.loop_length_input.setToolTip("Loop Length (seconds)")
+        self.loop_length_input.returnPressed.connect(self._update_loop_length)
+        loop_layout.addWidget(self.loop_length_input)
         
-        # Add turntable on the right (centered vertically)
-        self.turntable.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        loop_turntable_row.addWidget(self.turntable, 0, Qt.AlignmentFlag.AlignCenter)
+        loop_panel_main.addLayout(loop_layout)
         
-        layout.addLayout(loop_turntable_row)  # Add the horizontal row
+        # Add tempo and loop panels to controls
+        controls_layout.addWidget(tempo_panel)
+        controls_layout.addWidget(loop_panel)
         
-        # Sync button with beat indicator
+        # Turntable - Professional size for visibility
+        self.turntable.setFixedSize(130, 130)  # Larger turntable for better visibility
+        
+        # Add controls and turntable
+        layout.addLayout(controls_layout)
+        layout.addWidget(self.turntable, 0, Qt.AlignmentFlag.AlignCenter)
+        
+        # Sync button with beat indicator - Well spaced
         sync_row = QHBoxLayout()
-        sync_row.setSpacing(10)
+        sync_row.setSpacing(12)
+        sync_row.setContentsMargins(0, 2, 0, 0)
         sync_row.addWidget(self.beat_indicator)
         sync_row.addWidget(self.sync_button)
         sync_row.addStretch()
@@ -1749,7 +1851,7 @@ class DeckWidget(GlassWidget):
 
     def handle_volume_change(self, value):
         """
-        Handle changes to the volume slider.
+        Handle changes to the volume slider with dynamic color display.
 
         Args:
             value (int): Slider value (0-100).
@@ -1757,8 +1859,52 @@ class DeckWidget(GlassWidget):
         try:
             volume = value / 100.0
             self._current_volume = volume 
+            
+            # Update volume display text
+            self.volume_display.setText(f"{value}%")
+            
+            # Dynamic color based on volume level
+            if value == 0:
+                # OFF style - grayed out when muted
+                self.volume_display.setStyleSheet(
+                    "font-size: 10px; font-weight: bold; "
+                    "color: #444444; "
+                    "background: rgba(40, 40, 40, 0.4); "
+                    "border: 1px solid rgba(80, 80, 80, 0.3); "
+                    "border-radius: 4px; padding: 2px 4px;"
+                )
+            elif value < 30:
+                # Low volume - dim cyan
+                self.volume_display.setStyleSheet(
+                    "font-size: 10px; font-weight: bold; "
+                    "color: #00d4ff; "
+                    "background: rgba(0, 212, 255, 0.1); "
+                    "border-radius: 4px; padding: 2px 4px;"
+                )
+            elif value < 70:
+                # Medium volume - bright cyan
+                self.volume_display.setStyleSheet(
+                    "font-size: 10px; font-weight: bold; "
+                    "color: #00d4ff; "
+                    "background: rgba(0, 212, 255, 0.15); "
+                    "border-radius: 4px; padding: 2px 4px; "
+                    "text-shadow: 0 0 5px rgba(0, 212, 255, 0.4);"
+                )
+            else:
+                # High volume - BRIGHT YELLOW (warning)
+                self.volume_display.setStyleSheet(
+                    "font-size: 10px; font-weight: bold; "
+                    "color: #f3cf2c; "
+                    "background: rgba(243, 207, 44, 0.2); "
+                    "border: 1px solid rgba(243, 207, 44, 0.3); "
+                    "border-radius: 4px; padding: 2px 4px; "
+                    "text-shadow: 0 0 10px rgba(243, 207, 44, 0.7);"
+                )
+            
             self.volumeChanged.emit()
-        except Exception as e: print(f"Deck {self.deck_number}: Error in handle_volume_change: {e}"); traceback.print_exc()
+        except Exception as e: 
+            print(f"Deck {self.deck_number}: Error in handle_volume_change: {e}")
+            traceback.print_exc()
     
     def handle_tempo_slider_change(self, value):
         """
